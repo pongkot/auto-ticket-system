@@ -47,4 +47,9 @@ export class AppController {
   leaveTicket(@Query('plate') licencePlate: string): Observable<any> {
     return this.appService.leaveTicket(licencePlate);
   }
+
+  @Get('status')
+  getParkingLotStatus(): Observable<any> {
+    return this.appService.getAvaliableSlot();
+  }
 }

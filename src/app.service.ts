@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Mongo } from './Mongo';
 import { from, Observable, of } from 'rxjs';
-import { mergeMap, toArray } from 'rxjs/operators';
+import { map, mergeMap, tap } from 'rxjs/operators';
 import { ObjectId } from 'mongodb';
+import * as _ from 'lodash';
 
 @Injectable()
 export class AppService extends Mongo<any> {
@@ -100,6 +101,16 @@ export class AppService extends Mongo<any> {
           },
         ),
       ),
+    );
+  }
+
+  getAvaliableSlot(): Observable<any> {
+    const cursor = this.collection('parkingLotStage').find({ available: true });
+    return from(cursor).pipe(
+      map((docs) => ({
+        message: 'slot avaliable',
+        avaliable: _.size(docs),
+      })),
     );
   }
 }
