@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Mongo } from './Mongo';
 import { from, Observable, of } from 'rxjs';
-import { map, mergeMap, tap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { ObjectId } from 'mongodb';
 import * as _ from 'lodash';
 
