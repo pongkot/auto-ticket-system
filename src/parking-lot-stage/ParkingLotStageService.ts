@@ -224,4 +224,8 @@ export class ParkingLotStageService implements IParkingLotStageService {
         }),
       );
   }
+
+  searchParkingSlotByTicketId(id: string): Observable<ParkingLotStageModel> {
+    return undefined;
+  }
 }

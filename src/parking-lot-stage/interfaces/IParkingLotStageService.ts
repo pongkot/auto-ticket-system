@@ -18,4 +18,6 @@ export interface IParkingLotStageService {
     carDoc: { licencePlate: string; carSize: 's' | 'm' | 'l' },
     availableSlot: ParkingLotStageModel,
   ): Observable<{ ticketId: string }>;
+
+  searchParkingSlotByTicketId(id: string): Observable<ParkingLotStageModel>;
 }

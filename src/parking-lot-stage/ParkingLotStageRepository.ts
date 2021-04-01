@@ -72,4 +72,18 @@ export class ParkingLotStageRepository
     ).updateOne(filter, { $set: doc });
     return from(cursor);
   }
+
+  searchParkingLotStage<IFilter>(
+    filter: IFilter,
+  ): Observable<ParkingLotStageModel> {
+    const cursor = this.collection(collectionName.PARKING_LOT_STAGE).find(
+      filter,
+    );
+    return from(cursor).pipe(
+      mergeAll(),
+      map((doc: IParkingLotStageSchema) =>
+        this.parkingLotStageMapping.toModel(doc),
+      ),
+    );
+  }
 }

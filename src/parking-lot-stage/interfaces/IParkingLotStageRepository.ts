@@ -13,4 +13,8 @@ export interface IParkingLotStageRepository {
     filter: IFilter,
     doc: IUpdateValue,
   ): Observable<UpdateWriteOpResult>;
+
+  searchParkingLotStage<IFilter>(
+    filter: IFilter,
+  ): Observable<ParkingLotStageModel>;
 }
