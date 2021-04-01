@@ -11,11 +11,20 @@ import { CONFIG, Mapping, Repository } from '../constants';
 import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
-import { filter, map, mergeMap, reduce, toArray } from 'rxjs/operators';
+import {
+  filter,
+  map,
+  mergeAll,
+  mergeMap,
+  reduce,
+  tap,
+  toArray,
+} from 'rxjs/operators';
 import { ObjectId, UpdateWriteOpResult } from 'mongodb';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
 import * as _ from 'lodash';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 interface IAddress {
   lat: number;
@@ -294,87 +303,47 @@ export class ParkingLotStageService implements IParkingLotStageService {
     });
   }
 
-  getSummaryParkingLotStage(): Observable<{
-    capacity: number;
-    parking: {
-      s: number;
-      m: number;
-      l: number;
-      total: number;
-    };
-    available: {
-      s: number;
-      m: number;
-      l: number;
-      total: number;
-    };
-  }> {
+  getSummaryParkingLotStage(): Observable<any> {
     const parkingLotStageList = this.parkingLotStageRepository.listParkingLotStage();
-    const capacity = parkingLotStageList.pipe(
-      reduce((acc: number, curr: ParkingLotStageModel) => (acc += 1), 0),
-    );
-    const summaryParking = this.getSummaryCarSizeParking(parkingLotStageList);
-    const summaryAvailable = null;
-    return zip(capacity, summaryParking, summaryAvailable).pipe(
-      map((list: [number, IB, IB]) => {
-        const [capacity, summaryParking, summaryAvailable] = list;
+    return parkingLotStageList.pipe(
+      toArray(),
+      mergeMap(async (list: Array<ParkingLotStageModel>) => {
+        const avaliableList = list.filter((doc) =>
+          _.eq(doc.getAvailable(), true),
+        );
+        const capacity = _.size(list);
+        const parkingListBySize = _.groupBy(list, 'carSize');
+        const parkingListBySSize = _.size(parkingListBySize['s']);
+        const parkingListByMSize = _.size(parkingListBySize['m']);
+        const parkingListByLSize = _.size(parkingListBySize['l']);
+        const availableCarSSize = await this.observeSlotForCarSSize(
+          avaliableList,
+        ).toPromise();
+        const availableCarMSize = await this.observeSlotForCarMSize(
+          avaliableList,
+        ).toPromise();
+        const availableCarLSize = await this.observeSlotForCarLSize(
+          avaliableList,
+        ).toPromise();
         return {
           capacity,
           parking: {
-            s: summaryParking.s,
-            m: summaryParking.m,
-            l: summaryParking.l,
-            total: summaryParking.total,
+            s: parkingListBySSize,
+            m: parkingListByMSize,
+            l: parkingListByLSize,
+            total: _.sum([
+              parkingListByMSize,
+              parkingListBySSize,
+              parkingListByLSize,
+            ]),
           },
           available: {
-            s: summaryAvailable.s,
-            m: summaryAvailable.m,
-            l: summaryAvailable.l,
-            total: summaryAvailable.total,
+            s: availableCarSSize.available,
+            m: availableCarMSize.available,
+            l: availableCarLSize.available,
           },
         };
       }),
-    );
-  }
-
-  private getSummaryCarSizeParking(
-    parkingLotStageList: Observable<ParkingLotStageModel>,
-  ): Observable<IB> {
-    const carSSizeParking = this.getTotalCarSizeParking(
-      parkingLotStageList,
-      's',
-    );
-    const carMSizeParking = this.getTotalCarSizeParking(
-      parkingLotStageList,
-      'm',
-    );
-    const carLSizeParking = this.getTotalCarSizeParking(
-      parkingLotStageList,
-      'l',
-    );
-
-    return zip([carSSizeParking, carMSizeParking, carLSizeParking]).pipe(
-      map((list: Array<number>) => {
-        const [s, m, l] = list;
-        const total = _.sum([s, m, l]);
-        return {
-          s,
-          m,
-          l,
-          total,
-        };
-      }),
-    );
-  }
-
-  private getTotalCarSizeParking(
-    parkingLotStageList: Observable<ParkingLotStageModel>,
-    size: 's' | 'm' | 'l',
-  ): Observable<number> {
-    return parkingLotStageList.pipe(
-      toArray(),
-      map((list) => _.groupBy(list, 'carSize')),
-      map((list) => _.size(list[size])),
     );
   }
 }

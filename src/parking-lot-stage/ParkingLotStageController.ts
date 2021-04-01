@@ -40,7 +40,6 @@ export class ParkingLotStageController {
       s: number;
       m: number;
       l: number;
-      total: number;
     };
   }> {
     return this.parkingLotStageService.getSummaryParkingLotStage().pipe(

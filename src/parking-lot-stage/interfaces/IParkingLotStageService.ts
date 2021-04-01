@@ -37,7 +37,6 @@ export interface IParkingLotStageService {
       s: number;
       m: number;
       l: number;
-      total: number;
     };
   }>;
 }
