@@ -1,5 +1,5 @@
 import { IDatabaseOption } from './IDatabaseOption';
-import { IParkingLotSize } from '../../../htdocs/config';
+import { IParkingLotSize } from './IParkingLotSize';
 
 export interface IConfig {
   database: {
