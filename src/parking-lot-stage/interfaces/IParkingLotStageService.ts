@@ -24,4 +24,20 @@ export interface IParkingLotStageService {
   rangingAvailableAndShortDistanceSlot(): Observable<
     Array<ParkingLotStageModel>
   >;
+
+  getSummaryParkingLotStage(): Observable<{
+    capacity: number;
+    parking: {
+      s: number;
+      m: number;
+      l: number;
+      total: number;
+    };
+    available: {
+      s: number;
+      m: number;
+      l: number;
+      total: number;
+    };
+  }>;
 }

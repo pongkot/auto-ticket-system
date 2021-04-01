@@ -1,10 +1,12 @@
 import { Body, Controller, Get, Inject, Logger, Post } from '@nestjs/common';
 import { CONFIG, Service } from '../constants';
 import { IParkingLotStageService } from './interfaces/IParkingLotStageService';
-import { Observable, of } from 'rxjs';
+import { Observable, of, zip } from 'rxjs';
 import { ObjectId } from 'mongodb';
 import { CreateParkingLotDto } from './dto/CreateParkingLotDto';
 import { IConfig } from '../common/interfaces';
+import { map, tap } from 'rxjs/operators';
+import { doc } from 'prettier';
 
 @Controller('parking-lot-stage')
 export class ParkingLotStageController {
@@ -12,7 +14,7 @@ export class ParkingLotStageController {
 
   constructor(
     @Inject(Service.PARKING_LOT_STAGE)
-    private readonly parkingLotStage: IParkingLotStageService,
+    private readonly parkingLotStageService: IParkingLotStageService,
     @Inject(CONFIG)
     private readonly config: IConfig,
   ) {}
@@ -21,29 +23,31 @@ export class ParkingLotStageController {
   createParkingLot(
     @Body() body: CreateParkingLotDto,
   ): Observable<{ parkingLotId: Array<ObjectId> }> {
-    return this.parkingLotStage.createParkingLot(body.size);
+    return this.parkingLotStageService.createParkingLot(body.size);
   }
 
   @Get('status')
   getParkingLotStatus(): Observable<{
     subject: string;
     capacity: number;
-    parking: number;
+    parking: {
+      s: number;
+      m: number;
+      l: number;
+      total: number;
+    };
     available: {
       s: number;
       m: number;
       l: number;
+      total: number;
     };
   }> {
-    return of({
-      subject: 'Parking lot status',
-      capacity: 0,
-      parking: 0,
-      available: {
-        s: 0,
-        m: 0,
-        l: 0,
-      },
-    });
+    return this.parkingLotStageService.getSummaryParkingLotStage().pipe(
+      map((result) => ({
+        subject: 'Parking lot status',
+        ...result,
+      })),
+    );
   }
 }

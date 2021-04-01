@@ -6,12 +6,12 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { from, Observable, of } from 'rxjs';
+import { from, Observable, of, zip } from 'rxjs';
 import { CONFIG, Mapping, Repository } from '../constants';
 import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
-import { filter, map, mergeMap, reduce, toArray } from 'rxjs/operators';
+import { filter, map, mergeMap, reduce, tap, toArray } from 'rxjs/operators';
 import { ObjectId, UpdateWriteOpResult } from 'mongodb';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
@@ -285,5 +285,84 @@ export class ParkingLotStageService implements IParkingLotStageService {
     return this.parkingLotStageRepository.searchParkingLotStage({
       'assign.ticketId': id,
     });
+  }
+
+  getSummaryParkingLotStage(): Observable<{
+    capacity: number;
+    parking: {
+      s: number;
+      m: number;
+      l: number;
+      total: number;
+    };
+    available: {
+      s: number;
+      m: number;
+      l: number;
+      total: number;
+    };
+  }> {
+    const parkingLotStageList = this.parkingLotStageRepository.listParkingLotStage();
+    const capacity = parkingLotStageList.pipe(
+      reduce((acc: number, curr: ParkingLotStageModel) => (acc += 1), 0),
+    );
+    const carSSizeParking = this.getTotalCarSizeParking(
+      parkingLotStageList,
+      's',
+    );
+    const carMSizeParking = this.getTotalCarSizeParking(
+      parkingLotStageList,
+      'm',
+    );
+    const carLSizeParking = this.getTotalCarSizeParking(
+      parkingLotStageList,
+      'l',
+    );
+    return zip(
+      capacity,
+      carSSizeParking,
+      carMSizeParking,
+      carLSizeParking,
+    ).pipe(
+      map((list: Array<number>) => {
+        const [
+          capacity,
+          carSSizeParking,
+          carMSizeParking,
+          carLSizeParking,
+        ] = list;
+        const parkingTotal = _.sum([
+          carSSizeParking,
+          carMSizeParking,
+          carLSizeParking,
+        ]);
+        return {
+          capacity,
+          parking: {
+            s: carSSizeParking,
+            m: carMSizeParking,
+            l: carLSizeParking,
+            total: parkingTotal,
+          },
+          available: {
+            s: 0,
+            m: 0,
+            l: 0,
+            total: 0,
+          },
+        };
+      }),
+    );
+  }
+
+  private getTotalCarSizeParking(
+    parkingLotStageList: Observable<ParkingLotStageModel>,
+    size: 's' | 'm' | 'l',
+  ): Observable<number> {
+    return parkingLotStageList.pipe(
+      toArray(),
+      map((list) => _.groupBy(list, 'carSize')),
+      map((list) => _.size(list[size])),
+    );
   }
 }
