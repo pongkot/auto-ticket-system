@@ -23,6 +23,6 @@ import { ParkingLotStageController } from './ParkingLotStageController';
     },
   ],
   controllers: [ParkingLotStageController],
-  exports: [Service.PARKING_LOT_STAGE],
+  exports: [Service.PARKING_LOT_STAGE, Repository.PARKING_LOT_STAGE],
 })
 export class ParkingLotStageModule {}

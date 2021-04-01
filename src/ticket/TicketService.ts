@@ -6,11 +6,13 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { Service } from '../constants';
+import { from, Observable } from 'rxjs';
+import { Repository, Service } from '../constants';
 import { IParkingLotStageService } from '../parking-lot-stage/interfaces/IParkingLotStageService';
 import { map, mergeMap, toArray } from 'rxjs/operators';
 import { ParkingLotStageModel } from '../parking-lot-stage/ParkingLotStageModel';
+import { IParkingLotStageRepository } from '../parking-lot-stage/interfaces/IParkingLotStageRepository';
+import { UpdateWriteOpResult } from 'mongodb';
 
 @Injectable()
 export class TicketService implements ITicketService {
@@ -18,6 +20,8 @@ export class TicketService implements ITicketService {
   constructor(
     @Inject(Service.PARKING_LOT_STAGE)
     private readonly parkingLotStageService: IParkingLotStageService,
+    @Inject(Repository.PARKING_LOT_STAGE)
+    private readonly parkingLotStageRepository: IParkingLotStageRepository,
   ) {}
 
   createTicket(
@@ -63,6 +67,34 @@ export class TicketService implements ITicketService {
             }),
           ),
       ),
+    );
+  }
+
+  leaveTicket(ticketId: string): Observable<{ message: string }> {
+    const cursor = this.parkingLotStageRepository.updateAllParkingLotStage(
+      { 'assign.ticketId': ticketId },
+      {
+        assign: {
+          ticketId: '',
+          carSize: '',
+          licencePlate: '',
+        },
+        available: true,
+      },
+    );
+    return from(cursor).pipe(
+      map((response: UpdateWriteOpResult) => {
+        const { nModified } = response.result;
+        if (nModified > 0) {
+          return {
+            message: 'Thank you for coming',
+          };
+        } else {
+          return {
+            message: 'Ticket invalid, please contact officer',
+          };
+        }
+      }),
     );
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Param, Post, Put } from '@nestjs/common';
 import { Service } from '../constants';
 import { ITicketService } from './interfaces/ITicketService';
 import { Observable } from 'rxjs';
@@ -14,5 +14,10 @@ export class TicketController {
   @Post()
   createTicket(@Body() body: CreateTicketDto): Observable<any> {
     return this.ticketService.createTicket(body.licencePlate, body.carSize);
+  }
+
+  @Put('leave/:ticketId')
+  leaveTicket(@Param('ticketId') id: string): Observable<{ message: string }> {
+    return this.ticketService.leaveTicket(id);
   }
 }

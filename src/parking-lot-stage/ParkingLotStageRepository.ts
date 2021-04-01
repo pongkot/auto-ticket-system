@@ -86,4 +86,14 @@ export class ParkingLotStageRepository
       ),
     );
   }
+
+  updateAllParkingLotStage<IFilter, IUpdateValue>(
+    filter: IFilter,
+    doc: IUpdateValue,
+  ): Observable<UpdateWriteOpResult> {
+    const cursor = this.collection(
+      collectionName.PARKING_LOT_STAGE,
+    ).updateMany(filter, { $set: doc });
+    return from(cursor);
+  }
 }
