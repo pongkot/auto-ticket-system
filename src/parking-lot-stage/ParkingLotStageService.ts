@@ -124,7 +124,7 @@ export class ParkingLotStageService implements IParkingLotStageService {
       map((Docs: Array<IA>) => {
         return _.sortBy(Docs, 'distance');
       }),
-      map((Docs: Array<IA>) => Docs.map((list: IA) => list.Doc).slice(0, 2)),
+      map((Docs: Array<IA>) => Docs.map((list: IA) => list.Doc).slice(0, 4)),
     );
   }
 
