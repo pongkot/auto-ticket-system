@@ -27,18 +27,6 @@ interface IA {
   distance: number;
 }
 
-interface IB {
-  _id: ObjectId;
-  doc: {
-    assign: {
-      licencePlate: string;
-      carSize: string;
-      ticketId: string;
-    };
-    available: boolean;
-  };
-}
-
 @Injectable()
 export class ParkingLotStageService implements IParkingLotStageService {
   private readonly logger: Logger = new Logger('ParkingLotStageService');
@@ -238,21 +226,27 @@ export class ParkingLotStageService implements IParkingLotStageService {
     availableSlot: Array<ParkingLotStageModel>,
   ): Observable<{ ticketId: string }> {
     const ticketId = new ObjectId().toHexString();
-    const docs: Array<IB> = availableSlot.map(
-      (ParkingLot: ParkingLotStageModel) => {
-        return {
-          _id: ParkingLot.getId(),
-          doc: {
-            assign: {
-              licencePlate: carDoc.licencePlate,
-              carSize: carDoc.carSize,
-              ticketId,
-            },
-            available: false,
+    const docs = [];
+    const list = {
+      s: 1,
+      m: 2,
+      l: 3,
+    };
+
+    for (let i = 0; i < list[carDoc.carSize]; i++) {
+      const doc = availableSlot[i];
+      docs.push({
+        _id: doc.getId(),
+        doc: {
+          assign: {
+            licencePlate: carDoc.licencePlate,
+            carSize: carDoc.carSize,
+            ticketId,
           },
-        };
-      },
-    );
+          available: false,
+        },
+      });
+    }
 
     return from(docs).pipe(
       mergeMap((list) =>
@@ -278,7 +272,7 @@ export class ParkingLotStageService implements IParkingLotStageService {
           ),
       ),
       reduce(
-        (acc, curr) => {
+        (acc: { ticketId: string }, curr: { ticketId: string }) => {
           acc.ticketId = curr.ticketId;
           return acc;
         },
