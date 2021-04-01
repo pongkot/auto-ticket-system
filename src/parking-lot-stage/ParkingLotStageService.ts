@@ -11,7 +11,7 @@ import { CONFIG, Mapping, Repository } from '../constants';
 import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
-import { filter, map, mergeMap, reduce, tap, toArray } from 'rxjs/operators';
+import { filter, map, mergeMap, reduce, toArray } from 'rxjs/operators';
 import { ObjectId, UpdateWriteOpResult } from 'mongodb';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
@@ -237,16 +237,6 @@ export class ParkingLotStageService implements IParkingLotStageService {
     carDoc: { licencePlate: string; carSize: 's' | 'm' | 'l' },
     availableSlot: Array<ParkingLotStageModel>,
   ): Observable<{ ticketId: string }> {
-    // this.logger.debug(JSON.stringify(availableSlot, null, 2));
-    // this.logger.debug(carDoc);
-    // const doc = {
-    //   assign: {
-    //     licencePlate: carDoc.licencePlate,
-    //     carSize: carDoc.carSize,
-    //     ticketId: new ObjectId().toHexString(),
-    //   },
-    //   available: false,
-    // };
     const ticketId = new ObjectId().toHexString();
     const docs: Array<IB> = availableSlot.map(
       (ParkingLot: ParkingLotStageModel) => {
@@ -263,8 +253,6 @@ export class ParkingLotStageService implements IParkingLotStageService {
         };
       },
     );
-
-    // this.logger.debug(JSON.stringify(docs, null, 2));
 
     return from(docs).pipe(
       mergeMap((list) =>
@@ -297,20 +285,6 @@ export class ParkingLotStageService implements IParkingLotStageService {
         { ticketId: '' },
       ),
     );
-
-    // return this.parkingLotStageRepository
-    //   .updateParkingLotStage({ _id: availableSlot.getId() }, doc)
-    //   .pipe(
-    //     map((result: UpdateWriteOpResult) => {
-    //       if (result.result.nModified < 1) {
-    //         throw new HttpException(
-    //           "Something wrong, can't create ticket",
-    //           HttpStatus.NOT_FOUND,
-    //         );
-    //       }
-    //       return { ticketId: doc.assign.ticketId };
-    //     }),
-    //   );
   }
 
   searchParkingSlotByTicketId(id: string): Observable<ParkingLotStageModel> {
