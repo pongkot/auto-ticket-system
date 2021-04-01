@@ -2,10 +2,12 @@ import { IParkingLotStageService } from './interfaces/IParkingLotStageService';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
 import { CONFIG, Mapping, Repository } from '../constants';
-import { IConfig } from '../common/interfaces';
+import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
 import { map, tap } from 'rxjs/operators';
+import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class ParkingLotStageService implements IParkingLotStageService {
@@ -24,6 +26,26 @@ export class ParkingLotStageService implements IParkingLotStageService {
     const { parkingLotSize } = this.config;
     const parkingLotList = parkingLotSize[size];
     return from(parkingLotList).pipe(
+      map((config: IParkingLotSize) => {
+        const doc: IParkingLotStageSchema = {
+          _id: new ObjectId(),
+          assign: {
+            carSize: config.assign.size,
+            licencePlate: config.assign.licencePlate,
+            ticketId: config.assign.ticketId,
+          },
+          available: config.available,
+          slotAddress: {
+            lat: config.slotAddress.lat,
+            long: config.slotAddress.long,
+          },
+          slotId: config.slotId,
+        };
+        return doc;
+      }),
+      map((doc: IParkingLotStageSchema) =>
+        this.parkingLotStageMapping.toModel(doc),
+      ),
       tap((e) => console.log(e)),
       map(() => {
         return { parkingLotId: [] };
