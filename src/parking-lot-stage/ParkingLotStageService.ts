@@ -138,7 +138,7 @@ export class ParkingLotStageService implements IParkingLotStageService {
       .updateParkingLotStage({ _id: availableSlot.getId() }, doc)
       .pipe(
         map((result: UpdateWriteOpResult) => {
-          if (result.result.nModified >= 1) {
+          if (result.result.nModified < 1) {
             throw new HttpException(
               "Something wrong, can't create ticket",
               HttpStatus.NOT_FOUND,
