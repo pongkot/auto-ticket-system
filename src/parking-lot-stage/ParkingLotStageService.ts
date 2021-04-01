@@ -5,10 +5,11 @@ import { CONFIG, Mapping, Repository } from '../constants';
 import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
-import { map, mergeMap, reduce } from 'rxjs/operators';
+import { filter, map, mergeMap, reduce } from 'rxjs/operators';
 import { ObjectId } from 'mongodb';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
+import * as _ from 'lodash';
 
 @Injectable()
 export class ParkingLotStageService implements IParkingLotStageService {
@@ -59,5 +60,13 @@ export class ParkingLotStageService implements IParkingLotStageService {
         return { parkingLotId: result };
       }),
     );
+  }
+
+  listAvailableParkingLot(): Observable<ParkingLotStageModel> {
+    return this.parkingLotStageRepository
+      .listParkingLotStage()
+      .pipe(
+        filter((Doc: ParkingLotStageModel) => _.eq(Doc.getAvailable(), true)),
+      );
   }
 }
