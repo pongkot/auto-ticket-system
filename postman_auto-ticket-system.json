@@ -6,30 +6,113 @@
 	},
 	"item": [
 		{
-			"name": "Create parking lot size 3",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"size\": 3\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Create parking lot",
+			"item": [
+				{
+					"name": "Create parking lot size 3",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"size\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/parking-lot-stage",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"parking-lot-stage"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{url}}/parking-lot-stage",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"parking-lot-stage"
-					]
+				{
+					"name": "Create parking lot size 4",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"size\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/parking-lot-stage",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"parking-lot-stage"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create parking lot size 9999",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"size\": 9999\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/parking-lot-stage",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"parking-lot-stage"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create parking lot size null",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/parking-lot-stage",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"parking-lot-stage"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	],
 	"event": [
