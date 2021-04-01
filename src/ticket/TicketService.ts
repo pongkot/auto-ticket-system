@@ -9,7 +9,7 @@ import {
 import { Observable } from 'rxjs';
 import { Service } from '../constants';
 import { IParkingLotStageService } from '../parking-lot-stage/interfaces/IParkingLotStageService';
-import { map, mergeMap, tap, toArray } from 'rxjs/operators';
+import { map, mergeMap, toArray } from 'rxjs/operators';
 import { ParkingLotStageModel } from '../parking-lot-stage/ParkingLotStageModel';
 
 @Injectable()
