@@ -1,5 +1,5 @@
 import { ITicketService } from './interfaces/ITicketService';
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Service } from '../constants';
 import { IParkingLotStageService } from '../parking-lot-stage/interfaces/IParkingLotStageService';
@@ -22,9 +22,15 @@ export class TicketService implements ITicketService {
       mergeMap((slotList: Array<ParkingLotStageModel>) =>
         this.parkingLotStageService.observeSlotForCarSize(slotList, 's'),
       ),
-      mergeMap(() =>
-        this.parkingLotStageService.listAvailableAndShortDistanceSlot(),
-      ),
+      mergeMap((slot: { available: number }) => {
+        if (slot.available <= 0) {
+          throw new HttpException(
+            'No available parking lot',
+            HttpStatus.NOT_FOUND,
+          );
+        }
+        return this.parkingLotStageService.listAvailableAndShortDistanceSlot();
+      }),
     );
   }
 }
