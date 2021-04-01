@@ -5,7 +5,7 @@ import { CONFIG, Mapping, Repository } from '../constants';
 import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
-import { map, mergeMap, tap } from 'rxjs/operators';
+import { map, mergeMap, reduce, tap } from 'rxjs/operators';
 import { ObjectId } from 'mongodb';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
@@ -23,7 +23,7 @@ export class ParkingLotStageService implements IParkingLotStageService {
     private readonly parkingLotStageMapping: ParkingLotStageMapping,
   ) {}
 
-  createParkingLot(size: 3 | 4): Observable<{ parkingLotId: Array<string> }> {
+  createParkingLot(size: 3 | 4): Observable<{ parkingLotId: Array<ObjectId> }> {
     const { parkingLotSize } = this.config;
     const parkingLotList = parkingLotSize[size];
     return from(parkingLotList).pipe(
@@ -50,8 +50,12 @@ export class ParkingLotStageService implements IParkingLotStageService {
       mergeMap((Doc: ParkingLotStageModel) =>
         this.parkingLotStageRepository.createParkingLotStage(Doc),
       ),
-      map(() => {
-        return { parkingLotId: [] };
+      reduce((acc: Array<ObjectId>, curr: { _id: ObjectId }) => {
+        acc.push(curr._id);
+        return acc;
+      }, []),
+      map((result: Array<ObjectId>) => {
+        return { parkingLotId: result };
       }),
     );
   }
