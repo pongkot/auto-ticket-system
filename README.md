@@ -1,6 +1,6 @@
 # Automated Ticketing System
 
-A web api for create parking, check-in to park, check-out to leave and show parking status for example available lot for
+A web API for create parking, check-in to park, check-out to leave and show parking status for example available lot for
 car by size (s, m and l)
 
 # Environments
