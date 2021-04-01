@@ -175,7 +175,10 @@ export class Mongo<ISchema extends { _id: any }> {
     });
   }
 
-  protected updateMany(query: any, updateValue: { $set: any }) {
+  protected updateMany(
+    query: any,
+    updateValue: { $set: any },
+  ): Promise<UpdateWriteOpResult> {
     const url: string = this.getQueryStringConnect();
     const session: Promise<MongoClient> = MongoClient.connect(
       url,
