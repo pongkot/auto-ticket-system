@@ -25,7 +25,7 @@ export class AppService extends Mongo<any> {
       {
         slotId: 'l-1',
         slotAddress: {
-          x: 2,
+          x: 1,
           y: 0,
         },
         available: true,
@@ -34,7 +34,7 @@ export class AppService extends Mongo<any> {
       {
         slotId: 'l-2',
         slotAddress: {
-          x: 3,
+          x: 2,
           y: 0,
         },
         available: true,
@@ -43,7 +43,16 @@ export class AppService extends Mongo<any> {
       {
         slotId: 'l-3',
         slotAddress: {
-          x: 1,
+          x: 3,
+          y: 0,
+        },
+        available: true,
+        assign: null,
+      },
+      {
+        slotId: 'l-4',
+        slotAddress: {
+          x: 4,
           y: 0,
         },
         available: true,
@@ -129,7 +138,6 @@ export class AppService extends Mongo<any> {
               this.getDistance(docs[i].slotAddress, docs[j].slotAddress) === 1
             ) {
               m += 1;
-              i += 1;
             }
           }
         }
