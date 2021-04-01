@@ -4,6 +4,7 @@ import { ParkingLotStageMapping } from './ParkingLotStageMapping';
 import { ParkingLotStageRepository } from './ParkingLotStageRepository';
 import { Mapping, Repository, Service } from '../constants';
 import { ParkingLotStageService } from './ParkingLotStageService';
+import { ParkingLotStageController } from './ParkingLotStageController';
 
 @Module({
   imports: [CommonModule],
@@ -21,6 +22,7 @@ import { ParkingLotStageService } from './ParkingLotStageService';
       useClass: ParkingLotStageService,
     },
   ],
+  controllers: [ParkingLotStageController],
   exports: [],
 })
 export class ParkingLotStageModule {}
