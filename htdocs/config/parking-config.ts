@@ -1,4 +1,18 @@
-export const parking1x3 = [
+export interface IParkingLotSize {
+  slotId: string;
+  slotAddress: {
+    lat: number;
+    long: number;
+  };
+  available: boolean;
+  assign: {
+    ticketId: string;
+    licencePlate: string;
+    size: string;
+  };
+}
+
+export const parking1x3: Array<IParkingLotSize> = [
   {
     slotId: 'A-1',
     slotAddress: {
@@ -40,7 +54,7 @@ export const parking1x3 = [
   },
 ];
 
-export const parking1x4 = [
+export const parking1x4: Array<IParkingLotSize> = [
   {
     slotId: 'A-1',
     slotAddress: {
