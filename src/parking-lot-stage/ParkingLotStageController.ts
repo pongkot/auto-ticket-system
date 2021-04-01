@@ -1,7 +1,8 @@
-import { Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { Service } from '../constants';
 import { IParkingLotStageService } from './interfaces/IParkingLotStageService';
 import { Observable } from 'rxjs';
+import { ObjectId } from 'mongodb';
 
 @Controller('parking-lot-stage')
 export class ParkingLotStageController {
@@ -11,7 +12,9 @@ export class ParkingLotStageController {
   ) {}
 
   @Post()
-  createParkingLot(): Observable<any> {
-    return this.parkingLotStage.createParkingLot(3);
+  createParkingLot(
+    @Body('size') size: 3 | 4,
+  ): Observable<{ parkingLotId: Array<ObjectId> }> {
+    return this.parkingLotStage.createParkingLot(size);
   }
 }

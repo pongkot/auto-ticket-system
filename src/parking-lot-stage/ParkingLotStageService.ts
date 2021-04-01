@@ -5,7 +5,7 @@ import { CONFIG, Mapping, Repository } from '../constants';
 import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
-import { map, mergeMap, reduce, tap } from 'rxjs/operators';
+import { map, mergeMap, reduce } from 'rxjs/operators';
 import { ObjectId } from 'mongodb';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
