@@ -54,7 +54,7 @@ export class AppController {
   }
 
   @Get('status-m')
-  getStatuslotForMSize(): Observable<any> {
+  getStatusSlotForMSize(): Observable<any> {
     return this.appService.forMSize();
   }
 }
