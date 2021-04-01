@@ -138,6 +138,33 @@ export class AppService extends Mongo<any> {
               this.getDistance(docs[i].slotAddress, docs[j].slotAddress) === 1
             ) {
               m += 1;
+              i += 1;
+            }
+          }
+        }
+        return m;
+      }),
+    );
+  }
+
+  forLSize(): Observable<any> {
+    const cursor = this.collection('parkingLotStage').find({ available: true });
+    return from(cursor).pipe(
+      map((docs: Array<any>) => {
+        let m = 0;
+        for (let i = 0, j = 1, k = 2; i < _.size(docs); i++, j++, k++) {
+          if (docs[k]) {
+            console.log({
+              p1: this.getDistance(docs[i].slotAddress, docs[j].slotAddress),
+              p2: this.getDistance(docs[j].slotAddress, docs[k].slotAddress),
+            });
+
+            if (
+              this.getDistance(docs[i].slotAddress, docs[j].slotAddress) ===
+                1 &&
+              this.getDistance(docs[j].slotAddress, docs[k].slotAddress) === 1
+            ) {
+              m += 1;
             }
           }
         }
