@@ -4,5 +4,5 @@ export interface ITicketService {
   createTicket(
     licencePlate: string,
     carSize: 's' | 'm' | 'l',
-  ): Observable<{ ticketId: string }>;
+  ): Observable<{ ticketId: string; yourSlot: Array<string> }>;
 }

@@ -9,7 +9,7 @@ import {
 import { Observable } from 'rxjs';
 import { Service } from '../constants';
 import { IParkingLotStageService } from '../parking-lot-stage/interfaces/IParkingLotStageService';
-import { mergeMap, toArray } from 'rxjs/operators';
+import { map, mergeMap, toArray } from 'rxjs/operators';
 import { ParkingLotStageModel } from '../parking-lot-stage/ParkingLotStageModel';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class TicketService implements ITicketService {
   createTicket(
     licencePlate: string,
     carSize: 's' | 'm' | 'l',
-  ): Observable<{ ticketId: string }> {
+  ): Observable<{ ticketId: string; yourSlot: Array<string> }> {
     return this.parkingLotStageService.listAvailableParkingLot().pipe(
       toArray(),
       mergeMap((slotList: Array<ParkingLotStageModel>) =>
@@ -48,6 +48,21 @@ export class TicketService implements ITicketService {
           availableSlot,
         );
       }),
+      mergeMap((ticket: { ticketId: string }) =>
+        this.parkingLotStageService
+          .searchParkingSlotByTicketId(ticket.ticketId)
+          .pipe(
+            toArray(),
+            map((slotsList: Array<ParkingLotStageModel>) => {
+              return {
+                ticketId: ticket.ticketId,
+                yourSlot: slotsList.map((Doc: ParkingLotStageModel) =>
+                  Doc.getSlotId(),
+                ),
+              };
+            }),
+          ),
+      ),
     );
   }
 }
