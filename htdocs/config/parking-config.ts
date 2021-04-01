@@ -7,6 +7,7 @@ export const parking1x3 = [
     },
     available: true,
     assign: {
+      ticketId: '',
       licencePlate: '',
       size: '',
     },
@@ -19,6 +20,7 @@ export const parking1x3 = [
     },
     available: true,
     assign: {
+      ticketId: '',
       licencePlate: '',
       size: '',
     },
@@ -31,6 +33,7 @@ export const parking1x3 = [
     },
     available: true,
     assign: {
+      ticketId: '',
       licencePlate: '',
       size: '',
     },
@@ -46,6 +49,7 @@ export const parking1x4 = [
     },
     available: true,
     assign: {
+      ticketId: '',
       licencePlate: '',
       size: '',
     },
@@ -58,6 +62,7 @@ export const parking1x4 = [
     },
     available: true,
     assign: {
+      ticketId: '',
       licencePlate: '',
       size: '',
     },
@@ -70,6 +75,7 @@ export const parking1x4 = [
     },
     available: true,
     assign: {
+      ticketId: '',
       licencePlate: '',
       size: '',
     },
@@ -82,6 +88,7 @@ export const parking1x4 = [
     },
     available: true,
     assign: {
+      ticketId: '',
       licencePlate: '',
       size: '',
     },
