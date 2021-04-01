@@ -112,7 +112,7 @@ export class ParkingLotStageService implements IParkingLotStageService {
     let cursor = of(null);
     switch (carSize) {
       case 'l':
-        cursor = null;
+        cursor = this.observeSlotForCarLSize(slotList);
         break;
       case 'm':
         cursor = this.observeSlotForCarMSize(slotList);
@@ -161,14 +161,51 @@ export class ParkingLotStageService implements IParkingLotStageService {
     );
   }
 
+  private observeSlotForCarLSize(
+    slotList: Array<ParkingLotStageModel>,
+  ): Observable<{ available: number }> {
+    return from(slotList).pipe(
+      filter((slot: ParkingLotStageModel) => _.eq(slot.getAvailable(), true)),
+      toArray(),
+      map((docs: Array<ParkingLotStageModel>) => {
+        let m = 0;
+        for (let i = 0, j = 1, k = 2; i < _.size(docs); i++, j++, k++) {
+          if (docs[k]) {
+            if (
+              _.eq(
+                ParkingLotStageService.getDistance(
+                  docs[i].getSlotAddress(),
+                  docs[j].getSlotAddress(),
+                ),
+                1,
+              ) &&
+              _.eq(
+                ParkingLotStageService.getDistance(
+                  docs[j].getSlotAddress(),
+                  docs[k].getSlotAddress(),
+                ),
+                1,
+              )
+            ) {
+              m += 1;
+              i += 3;
+            }
+          }
+        }
+        return m;
+      }),
+      map((availableSlotTotal: number) => ({ available: availableSlotTotal })),
+    );
+  }
+
   parkingActivate(
     carDoc: { licencePlate: string; carSize: 's' | 'm' | 'l' },
     availableSlot: ParkingLotStageModel,
   ): Observable<{ ticketId: string }> {
     const doc = {
       assign: {
-        licencePlate: 'abc123',
-        carSize: 's',
+        licencePlate: carDoc.licencePlate,
+        carSize: carDoc.carSize,
         ticketId: new ObjectId().toHexString(),
       },
       available: false,

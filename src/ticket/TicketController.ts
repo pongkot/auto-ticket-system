@@ -12,6 +12,6 @@ export class TicketController {
 
   @Post()
   createTicket(): Observable<any> {
-    return this.ticketService.createTicket('abc1234', 's');
+    return this.ticketService.createTicket('abc1234', 'm');
   }
 }

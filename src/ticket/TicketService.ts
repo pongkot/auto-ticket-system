@@ -1,5 +1,11 @@
 import { ITicketService } from './interfaces/ITicketService';
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Service } from '../constants';
 import { IParkingLotStageService } from '../parking-lot-stage/interfaces/IParkingLotStageService';
@@ -8,6 +14,7 @@ import { ParkingLotStageModel } from '../parking-lot-stage/ParkingLotStageModel'
 
 @Injectable()
 export class TicketService implements ITicketService {
+  private logger: Logger = new Logger('TicketService');
   constructor(
     @Inject(Service.PARKING_LOT_STAGE)
     private readonly parkingLotStageService: IParkingLotStageService,
@@ -20,7 +27,7 @@ export class TicketService implements ITicketService {
     return this.parkingLotStageService.listAvailableParkingLot().pipe(
       toArray(),
       mergeMap((slotList: Array<ParkingLotStageModel>) =>
-        this.parkingLotStageService.observeSlotForCarSize(slotList, 's'),
+        this.parkingLotStageService.observeSlotForCarSize(slotList, carSize),
       ),
       mergeMap((slot: { available: number }) => {
         if (slot.available <= 0) {
