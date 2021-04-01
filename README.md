@@ -20,10 +20,10 @@ AUTO_TICKET_SYSTEM_DB_NAME
 docker-composer up
 
 # Unit test
-npm run test
+yarn test
 
 # Coverage test
-npm run test:cov
+yarn test:cov
 ```
 
 # Getting Started
