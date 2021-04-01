@@ -5,11 +5,16 @@ import { CONFIG, Mapping, Repository } from '../constants';
 import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
-import { filter, map, mergeMap, reduce } from 'rxjs/operators';
+import { filter, map, mergeMap, reduce, toArray } from 'rxjs/operators';
 import { ObjectId } from 'mongodb';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
 import * as _ from 'lodash';
+
+interface IAddress {
+  lat: number;
+  long: number;
+}
 
 @Injectable()
 export class ParkingLotStageService implements IParkingLotStageService {
@@ -62,11 +67,28 @@ export class ParkingLotStageService implements IParkingLotStageService {
     );
   }
 
-  listAvailableParkingLot(): Observable<ParkingLotStageModel> {
-    return this.parkingLotStageRepository
-      .listParkingLotStage()
-      .pipe(
-        filter((Doc: ParkingLotStageModel) => _.eq(Doc.getAvailable(), true)),
-      );
+  listAvailableParkingLot(): Observable<any> {
+    return this.parkingLotStageRepository.listParkingLotStage().pipe(
+      filter((Doc: ParkingLotStageModel) => _.eq(Doc.getAvailable(), true)),
+      map((Doc: ParkingLotStageModel) => {
+        return {
+          Doc,
+          distance: this.getDistanceFromGate(Doc.getSlotAddress()),
+        };
+      }),
+      toArray(),
+      map((Docs: Array<{ Doc: ParkingLotStageModel; distance: number }>) => {
+        return _.sortBy(Docs, 'distance')[0];
+      }),
+    );
+  }
+
+  private getDistanceFromGate(slotAddress: IAddress): number {
+    const gateAddress = this.config.gateAddress;
+    return ParkingLotStageService.getDistance(slotAddress, gateAddress);
+  }
+
+  private static getDistance(a: IAddress, b: IAddress): number {
+    return Math.sqrt(Math.pow(a.lat - b.lat, 2) - Math.pow(a.long - b.long, 2));
   }
 }

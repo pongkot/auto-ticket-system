@@ -81,4 +81,11 @@ export class ParkingLotStageModel {
     this.carSize = size;
     return this;
   }
+
+  getSlotAddress(): { lat: number; long: number } {
+    return {
+      lat: this.slotAddressLat,
+      long: this.slotAddressLong,
+    };
+  }
 }
