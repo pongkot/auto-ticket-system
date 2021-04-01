@@ -1,7 +1,8 @@
-import { Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { Service } from '../constants';
 import { ITicketService } from './interfaces/ITicketService';
 import { Observable } from 'rxjs';
+import { CreateTicketDto } from './dto/CreateTicketDto';
 
 @Controller('ticket')
 export class TicketController {
@@ -11,7 +12,7 @@ export class TicketController {
   ) {}
 
   @Post()
-  createTicket(): Observable<any> {
-    return this.ticketService.createTicket('abc1234', 'l');
+  createTicket(@Body() body: CreateTicketDto): Observable<any> {
+    return this.ticketService.createTicket(body.licencePlate, body.carSize);
   }
 }
