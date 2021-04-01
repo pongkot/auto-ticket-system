@@ -3,10 +3,11 @@ import { IParkingLotStageRepository } from './interfaces/IParkingLotStageReposit
 import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
 import { Observable } from 'rxjs';
 import { InsertWriteOpResult } from 'mongodb';
-import { Inject, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CONFIG } from '../constants';
 import { IConfig } from '../common/interfaces';
 
+@Injectable()
 export class ParkingLotStageRepository
   extends Mongo<IParkingLotStageSchema>
   implements IParkingLotStageRepository {
