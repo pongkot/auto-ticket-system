@@ -1,4 +1,7 @@
+import { ObjectId } from 'mongodb';
+
 export class ParkingLotStageModel {
+  private _id: ObjectId;
   private slotId: string;
   private slotAddressLat: number;
   private slotAddressLong: number;
@@ -6,6 +9,15 @@ export class ParkingLotStageModel {
   private ticketId: string;
   private licencePlate: string;
   private size: string;
+
+  setId(id: ObjectId): this {
+    this._id = id;
+    return this;
+  }
+
+  getId(): ObjectId {
+    return this._id;
+  }
 
   getSlotId(): string {
     return this.slotId;
