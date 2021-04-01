@@ -5,7 +5,7 @@ import { CONFIG, Mapping, Repository } from '../constants';
 import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
-import { filter, map, mergeMap, reduce, tap, toArray } from 'rxjs/operators';
+import { filter, map, mergeMap, reduce, toArray } from 'rxjs/operators';
 import { ObjectId } from 'mongodb';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
@@ -73,17 +73,6 @@ export class ParkingLotStageService implements IParkingLotStageService {
       .pipe(
         filter((Doc: ParkingLotStageModel) => _.eq(Doc.getAvailable(), true)),
       );
-    //   map((Doc: ParkingLotStageModel) => {
-    //     return {
-    //       Doc,
-    //       distance: this.getDistanceFromGate(Doc.getSlotAddress()),
-    //     };
-    //   }),
-    //   toArray(),
-    //   map((Docs: Array<{ Doc: ParkingLotStageModel; distance: number }>) => {
-    //     return _.sortBy(Docs, 'distance')[0];
-    //   }),
-    // );
   }
 
   private getDistanceFromGate(slotAddress: IAddress): number {

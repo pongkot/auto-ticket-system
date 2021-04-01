@@ -15,6 +15,8 @@ export class TicketService implements ITicketService {
     licencePlate: string,
     carSize: 's' | 'm' | 'l',
   ): Observable<any> {
-    return this.parkingLotStageService.listAvailableAndShortDistanceSlot();
+    return this.parkingLotStageService
+      .listAvailableAndShortDistanceSlot()
+      .pipe();
   }
 }
