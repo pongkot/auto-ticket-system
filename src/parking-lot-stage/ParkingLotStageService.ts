@@ -55,6 +55,7 @@ export class ParkingLotStageService implements IParkingLotStageService {
         return acc;
       }, []),
       map((result: Array<ObjectId>) => {
+        this.logger.log('Create parking lot stage success');
         return { parkingLotId: result };
       }),
     );
