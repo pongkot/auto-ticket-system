@@ -11,7 +11,7 @@ import { CONFIG, Mapping, Repository } from '../constants';
 import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
-import { filter, map, mergeMap, reduce, tap, toArray } from 'rxjs/operators';
+import { filter, map, mergeMap, reduce, toArray } from 'rxjs/operators';
 import { ObjectId, UpdateWriteOpResult } from 'mongodb';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
@@ -25,6 +25,13 @@ interface IAddress {
 interface IA {
   Doc: ParkingLotStageModel;
   distance: number;
+}
+
+interface IB {
+  s: number;
+  m: number;
+  l: number;
+  total: number;
 }
 
 @Injectable()
@@ -306,6 +313,33 @@ export class ParkingLotStageService implements IParkingLotStageService {
     const capacity = parkingLotStageList.pipe(
       reduce((acc: number, curr: ParkingLotStageModel) => (acc += 1), 0),
     );
+    const summaryParking = this.getSummaryCarSizeParking(parkingLotStageList);
+    const summaryAvailable = null;
+    return zip(capacity, summaryParking, summaryAvailable).pipe(
+      map((list: [number, IB, IB]) => {
+        const [capacity, summaryParking, summaryAvailable] = list;
+        return {
+          capacity,
+          parking: {
+            s: summaryParking.s,
+            m: summaryParking.m,
+            l: summaryParking.l,
+            total: summaryParking.total,
+          },
+          available: {
+            s: summaryAvailable.s,
+            m: summaryAvailable.m,
+            l: summaryAvailable.l,
+            total: summaryAvailable.total,
+          },
+        };
+      }),
+    );
+  }
+
+  private getSummaryCarSizeParking(
+    parkingLotStageList: Observable<ParkingLotStageModel>,
+  ): Observable<IB> {
     const carSSizeParking = this.getTotalCarSizeParking(
       parkingLotStageList,
       's',
@@ -318,38 +352,16 @@ export class ParkingLotStageService implements IParkingLotStageService {
       parkingLotStageList,
       'l',
     );
-    return zip(
-      capacity,
-      carSSizeParking,
-      carMSizeParking,
-      carLSizeParking,
-    ).pipe(
+
+    return zip([carSSizeParking, carMSizeParking, carLSizeParking]).pipe(
       map((list: Array<number>) => {
-        const [
-          capacity,
-          carSSizeParking,
-          carMSizeParking,
-          carLSizeParking,
-        ] = list;
-        const parkingTotal = _.sum([
-          carSSizeParking,
-          carMSizeParking,
-          carLSizeParking,
-        ]);
+        const [s, m, l] = list;
+        const total = _.sum([s, m, l]);
         return {
-          capacity,
-          parking: {
-            s: carSSizeParking,
-            m: carMSizeParking,
-            l: carLSizeParking,
-            total: parkingTotal,
-          },
-          available: {
-            s: 0,
-            m: 0,
-            l: 0,
-            total: 0,
-          },
+          s,
+          m,
+          l,
+          total,
         };
       }),
     );
