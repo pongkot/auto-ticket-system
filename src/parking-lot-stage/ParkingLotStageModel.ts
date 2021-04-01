@@ -8,7 +8,7 @@ export class ParkingLotStageModel {
   private available: boolean;
   private ticketId: string;
   private licencePlate: string;
-  private size: string;
+  private carSize: string;
 
   setId(id: ObjectId): this {
     this._id = id;
@@ -73,12 +73,12 @@ export class ParkingLotStageModel {
     return this;
   }
 
-  getSize(): string {
-    return this.size;
+  getCarSize(): string {
+    return this.carSize;
   }
 
-  setSize(size: string): this {
-    this.size = size;
+  setCarSize(size: string): this {
+    this.carSize = size;
     return this;
   }
 }

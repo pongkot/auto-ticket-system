@@ -11,6 +11,6 @@ export interface IParkingLotStageSchema {
   assign: {
     ticketId: string;
     licencePlate: string;
-    size: string;
+    carSize: string;
   };
 }

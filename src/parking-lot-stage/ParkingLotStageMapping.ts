@@ -15,7 +15,7 @@ export class ParkingLotStageMapping extends MappingCore<
       .setAvailable(context.available)
       .setTicketId(context.assign.ticketId)
       .setLicencePlate(context.assign.licencePlate)
-      .setSize(context.assign.size);
+      .setCarSize(context.assign.carSize);
   }
 
   toObject(context: ParkingLotStageModel): IParkingLotStageSchema {
@@ -23,7 +23,7 @@ export class ParkingLotStageMapping extends MappingCore<
       _id: context.getId(),
       assign: {
         licencePlate: context.getLicencePlate(),
-        size: context.getSize(),
+        carSize: context.getCarSize(),
         ticketId: context.getTicketId(),
       },
       available: context.getAvailable(),
