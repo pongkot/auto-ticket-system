@@ -3,6 +3,7 @@ import { Service } from '../constants';
 import { IParkingLotStageService } from './interfaces/IParkingLotStageService';
 import { Observable } from 'rxjs';
 import { ObjectId } from 'mongodb';
+import { CreateParkingLotDto } from './dto/CreateParkingLotDto';
 
 @Controller('parking-lot-stage')
 export class ParkingLotStageController {
@@ -13,8 +14,8 @@ export class ParkingLotStageController {
 
   @Post()
   createParkingLot(
-    @Body('size') size: 3 | 4,
+    @Body() body: CreateParkingLotDto,
   ): Observable<{ parkingLotId: Array<ObjectId> }> {
-    return this.parkingLotStage.createParkingLot(size);
+    return this.parkingLotStage.createParkingLot(body.size);
   }
 }

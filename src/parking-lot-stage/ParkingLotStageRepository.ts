@@ -5,7 +5,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CONFIG, Mapping } from '../constants';
 import { IConfig } from '../common/interfaces';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
-import { map, mergeMap, reduce, tap, toArray } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import {
   collectionName,
   IParkingLotStageSchema,
