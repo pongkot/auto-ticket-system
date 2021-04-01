@@ -1,6 +1,6 @@
 import { IParkingLotStageService } from './interfaces/IParkingLotStageService';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { CONFIG, Mapping, Repository } from '../constants';
 import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
@@ -96,6 +96,23 @@ export class ParkingLotStageService implements IParkingLotStageService {
       map((Docs: Array<{ Doc: ParkingLotStageModel; distance: number }>) => {
         return _.sortBy(Docs, 'distance')[0].Doc;
       }),
+    );
+  }
+
+  observeSlotForCarSize(
+    slotList: Array<ParkingLotStageModel>,
+    carSize: 's' | 'm' | 'l',
+  ): Observable<{ available: number }> {
+    return this.observeSlotForCarSSize(slotList);
+  }
+
+  private observeSlotForCarSSize(
+    slotList: Array<ParkingLotStageModel>,
+  ): Observable<{ available: number }> {
+    return from(slotList).pipe(
+      filter((slot: ParkingLotStageModel) => _.eq(slot.getAvailable(), true)),
+      toArray(),
+      map((docs: Array<ParkingLotStageModel>) => ({ available: _.size(docs) })),
     );
   }
 }
