@@ -64,7 +64,7 @@ export class AppService extends Mongo<any> {
     );
   }
 
-  listPackingLotAvaliable(): Observable<any> {
+  listPackingLotAvailable(): Observable<any> {
     const cursor = this.collection('parkingLotStage').find({ available: true });
     return from(cursor);
   }
@@ -117,12 +117,12 @@ export class AppService extends Mongo<any> {
     );
   }
 
-  getAvaliableSlot(): Observable<any> {
+  getAvailableSlot(): Observable<any> {
     const cursor = this.collection('parkingLotStage').find({ available: true });
     return from(cursor).pipe(
       map((docs) => ({
-        message: 'slot avaliable',
-        avaliable: _.size(docs),
+        message: 'slot available',
+        available: _.size(docs),
       })),
     );
   }

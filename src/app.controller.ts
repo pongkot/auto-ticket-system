@@ -24,7 +24,7 @@ export class AppController {
       x: 0,
       y: 0,
     };
-    return this.appService.listPackingLotAvaliable().pipe(
+    return this.appService.listPackingLotAvailable().pipe(
       mergeAll(),
       mergeMap((slot: any) =>
         this.appService.getDistanceFromGate(slot.slotAddress, gateAddress).pipe(
@@ -50,7 +50,7 @@ export class AppController {
 
   @Get('status')
   getParkingLotStatus(): Observable<any> {
-    return this.appService.getAvaliableSlot();
+    return this.appService.getAvailableSlot();
   }
 
   @Get('status-m')
