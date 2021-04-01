@@ -1,12 +1,18 @@
 import { IParkingLotStageService } from './interfaces/IParkingLotStageService';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { from, Observable, of } from 'rxjs';
 import { CONFIG, Mapping, Repository } from '../constants';
 import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
 import { filter, map, mergeMap, reduce, toArray } from 'rxjs/operators';
-import { ObjectId } from 'mongodb';
+import { ObjectId, UpdateWriteOpResult } from 'mongodb';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
 import * as _ from 'lodash';
@@ -119,7 +125,27 @@ export class ParkingLotStageService implements IParkingLotStageService {
   parkingActivate(
     carDoc: { licencePlate: string; carSize: 's' | 'm' | 'l' },
     availableSlot: ParkingLotStageModel,
-  ) {
-    //
+  ): Observable<{ ticketId: string }> {
+    const doc = {
+      assign: {
+        licencePlate: 'abc123',
+        carSize: 's',
+        ticketId: new ObjectId().toHexString(),
+      },
+      available: false,
+    };
+    return this.parkingLotStageRepository
+      .updateParkingLotStage({ _id: availableSlot.getId() }, doc)
+      .pipe(
+        map((result: UpdateWriteOpResult) => {
+          if (result.result.nModified >= 1) {
+            throw new HttpException(
+              "Something wrong, can't create ticket",
+              HttpStatus.NOT_FOUND,
+            );
+          }
+          return { ticketId: doc.assign.ticketId };
+        }),
+      );
   }
 }

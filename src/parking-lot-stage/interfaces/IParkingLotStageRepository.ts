@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { ObjectId } from 'mongodb';
+import { ObjectId, UpdateWriteOpResult } from 'mongodb';
 import { ParkingLotStageModel } from '../ParkingLotStageModel';
 
 export interface IParkingLotStageRepository {
@@ -12,5 +12,5 @@ export interface IParkingLotStageRepository {
   updateParkingLotStage<IFilter, IUpdateValue>(
     filter: IFilter,
     doc: IUpdateValue,
-  ): Observable<any>;
+  ): Observable<UpdateWriteOpResult>;
 }

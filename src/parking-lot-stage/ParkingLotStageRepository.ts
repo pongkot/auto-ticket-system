@@ -11,7 +11,7 @@ import {
   IParkingLotStageSchema,
 } from '../../htdocs/database/auto-ticket-system';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
-import { InsertOneWriteOpResult, ObjectId } from 'mongodb';
+import { InsertOneWriteOpResult, ObjectId, UpdateWriteOpResult } from 'mongodb';
 
 @Injectable()
 export class ParkingLotStageRepository
@@ -66,10 +66,10 @@ export class ParkingLotStageRepository
   updateParkingLotStage<IFilter, IUpdateValue>(
     filter: IFilter,
     doc: IUpdateValue,
-  ): Observable<any> {
+  ): Observable<UpdateWriteOpResult> {
     const cursor = this.collection(
       collectionName.PARKING_LOT_STAGE,
     ).updateOne(filter, { $set: doc });
-    return from(cursor).pipe(tap((e) => console.log(e)));
+    return from(cursor);
   }
 }
