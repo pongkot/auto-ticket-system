@@ -128,9 +128,12 @@ export class AppService extends Mongo<any> {
   }
 
   forMSize(): Observable<any> {
-    const cursor = this.collection('parkingLotStage').find({ available: true });
+    const cursor = this.collection('parkingLotStage')
+      .sort({ 'slotAddress.x': 1 })
+      .find({ available: true });
     return from(cursor).pipe(
       map((docs: Array<any>) => {
+        console.log(docs);
         let m = 0;
         for (let i = 0, j = 1; i < _.size(docs); i++, j++) {
           if (docs[j]) {
@@ -138,7 +141,7 @@ export class AppService extends Mongo<any> {
               this.getDistance(docs[i].slotAddress, docs[j].slotAddress) === 1
             ) {
               m += 1;
-              i += 1;
+              i += 2;
             }
           }
         }
@@ -148,16 +151,19 @@ export class AppService extends Mongo<any> {
   }
 
   forLSize(): Observable<any> {
-    const cursor = this.collection('parkingLotStage').find({ available: true });
+    const cursor = this.collection('parkingLotStage')
+      .sort({ 'slotAddress.x': 1 })
+      .find({ available: true });
     return from(cursor).pipe(
       map((docs: Array<any>) => {
+        console.log(docs);
         let m = 0;
         for (let i = 0, j = 1, k = 2; i < _.size(docs); i++, j++, k++) {
           if (docs[k]) {
-            console.log({
-              p1: this.getDistance(docs[i].slotAddress, docs[j].slotAddress),
-              p2: this.getDistance(docs[j].slotAddress, docs[k].slotAddress),
-            });
+            // console.log({
+            //   p1: this.getDistance(docs[i].slotAddress, docs[j].slotAddress),
+            //   p2: this.getDistance(docs[j].slotAddress, docs[k].slotAddress),
+            // });
 
             if (
               this.getDistance(docs[i].slotAddress, docs[j].slotAddress) ===
