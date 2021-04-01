@@ -6,4 +6,6 @@ export interface IParkingLotStageRepository {
   createParkingLotStage(
     Doc: ParkingLotStageModel,
   ): Observable<{ _id: ObjectId }>;
+
+  listParkingLotStage(): Observable<ParkingLotStageModel>;
 }
