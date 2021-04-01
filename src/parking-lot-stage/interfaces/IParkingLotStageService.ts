@@ -16,8 +16,12 @@ export interface IParkingLotStageService {
 
   parkingActivate(
     carDoc: { licencePlate: string; carSize: 's' | 'm' | 'l' },
-    availableSlot: ParkingLotStageModel,
+    availableSlot: Array<ParkingLotStageModel>,
   ): Observable<{ ticketId: string }>;
 
   searchParkingSlotByTicketId(id: string): Observable<ParkingLotStageModel>;
+
+  rangingAvailableAndShortDistanceSlot(): Observable<
+    Array<ParkingLotStageModel>
+  >;
 }

@@ -9,7 +9,7 @@ import {
 import { Observable } from 'rxjs';
 import { Service } from '../constants';
 import { IParkingLotStageService } from '../parking-lot-stage/interfaces/IParkingLotStageService';
-import { map, mergeMap, toArray } from 'rxjs/operators';
+import { map, mergeMap, tap, toArray } from 'rxjs/operators';
 import { ParkingLotStageModel } from '../parking-lot-stage/ParkingLotStageModel';
 
 @Injectable()
@@ -36,18 +36,19 @@ export class TicketService implements ITicketService {
             HttpStatus.NOT_FOUND,
           );
         }
-        return this.parkingLotStageService.listAvailableAndShortDistanceSlot();
+        return this.parkingLotStageService.rangingAvailableAndShortDistanceSlot();
       }),
-      mergeMap((availableSlot: ParkingLotStageModel) => {
+      mergeMap((availableSlotList: Array<ParkingLotStageModel>) => {
         const carDoc = {
           licencePlate,
           carSize,
         };
         return this.parkingLotStageService.parkingActivate(
           carDoc,
-          availableSlot,
+          availableSlotList,
         );
       }),
+      tap((e) => console.log(e)),
       mergeMap((ticket: { ticketId: string }) =>
         this.parkingLotStageService
           .searchParkingSlotByTicketId(ticket.ticketId)
