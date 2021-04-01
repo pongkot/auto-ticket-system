@@ -175,7 +175,7 @@ export class Mongo<ISchema extends { _id: any }> {
     });
   }
 
-  protected updateMany(doc: ISchema, query: { $set: any }) {
+  protected updateMany(query: any, updateValue: { $set: any }) {
     const url: string = this.getQueryStringConnect();
     const session: Promise<MongoClient> = MongoClient.connect(
       url,
@@ -189,7 +189,7 @@ export class Mongo<ISchema extends { _id: any }> {
           const dbo = connect.db(database);
           dbo
             .collection(collection)
-            .updateMany(query, doc)
+            .updateMany(query, updateValue)
             .then((result: UpdateWriteOpResult) => {
               connect.close(() => {
                 resolve(result);
