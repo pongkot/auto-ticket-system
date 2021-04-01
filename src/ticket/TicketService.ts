@@ -23,7 +23,7 @@ export class TicketService implements ITicketService {
   createTicket(
     licencePlate: string,
     carSize: 's' | 'm' | 'l',
-  ): Observable<any> {
+  ): Observable<{ ticketId: string }> {
     return this.parkingLotStageService.listAvailableParkingLot().pipe(
       toArray(),
       mergeMap((slotList: Array<ParkingLotStageModel>) =>
