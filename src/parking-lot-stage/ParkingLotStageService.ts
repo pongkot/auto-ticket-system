@@ -109,7 +109,19 @@ export class ParkingLotStageService implements IParkingLotStageService {
     slotList: Array<ParkingLotStageModel>,
     carSize: 's' | 'm' | 'l',
   ): Observable<{ available: number }> {
-    return this.observeSlotForCarSSize(slotList);
+    let cursor = of(null);
+    switch (carSize) {
+      case 'l':
+        cursor = null;
+        break;
+      case 'm':
+        cursor = this.observeSlotForCarMSize(slotList);
+        break;
+      case 's':
+        cursor = this.observeSlotForCarSSize(slotList);
+        break;
+    }
+    return cursor;
   }
 
   private observeSlotForCarSSize(
@@ -119,6 +131,33 @@ export class ParkingLotStageService implements IParkingLotStageService {
       filter((slot: ParkingLotStageModel) => _.eq(slot.getAvailable(), true)),
       toArray(),
       map((docs: Array<ParkingLotStageModel>) => ({ available: _.size(docs) })),
+    );
+  }
+
+  private observeSlotForCarMSize(
+    slotList: Array<ParkingLotStageModel>,
+  ): Observable<{ available: number }> {
+    return from(slotList).pipe(
+      filter((slot: ParkingLotStageModel) => _.eq(slot.getAvailable(), true)),
+      toArray(),
+      map((docs: Array<ParkingLotStageModel>) => {
+        let m = 0;
+        for (let i = 0, j = 1; i < _.size(docs); i++, j++) {
+          if (docs[j]) {
+            if (
+              ParkingLotStageService.getDistance(
+                docs[i].getSlotAddress(),
+                docs[j].getSlotAddress(),
+              ) === 1
+            ) {
+              m += 1;
+              i += 2;
+            }
+          }
+        }
+        return m;
+      }),
+      map((availableSlotTotal: number) => ({ available: availableSlotTotal })),
     );
   }
 
