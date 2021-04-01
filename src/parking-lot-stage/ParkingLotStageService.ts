@@ -226,6 +226,8 @@ export class ParkingLotStageService implements IParkingLotStageService {
   }
 
   searchParkingSlotByTicketId(id: string): Observable<ParkingLotStageModel> {
-    return undefined;
+    return this.parkingLotStageRepository.searchParkingLotStage({
+      'assign.ticketId': id,
+    });
   }
 }
