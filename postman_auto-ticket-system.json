@@ -118,13 +118,65 @@
 			"name": "Create ticket",
 			"item": [
 				{
-					"name": "Create ticket",
+					"name": "Create ticket with car size S",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"carSize\": \"s\",\r\n    \"licencePlate\": \"abc123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/ticket",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ticket with car size M",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"carSize\": \"m\",\r\n    \"licencePlate\": \"abc123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/ticket",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ticket with car size L",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"carSize\": \"l\",\r\n    \"licencePlate\": \"abc123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -170,7 +222,7 @@
 					"response": []
 				},
 				{
-					"name": "Create ticket with car XL size",
+					"name": "Create ticket with car size XL",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -196,6 +248,43 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Leave parking lot",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/ticket/leave/6065e7132f2aa12a40ff912c",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"ticket",
+						"leave",
+						"6065e7132f2aa12a40ff912c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get parking lot status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/parking-lot-stage/status",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"parking-lot-stage",
+						"status"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
