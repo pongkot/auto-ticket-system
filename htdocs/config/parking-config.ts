@@ -1,16 +1,4 @@
-export interface IParkingLotSize {
-  slotId: string;
-  slotAddress: {
-    lat: number;
-    long: number;
-  };
-  available: boolean;
-  assign: {
-    ticketId: string;
-    licencePlate: string;
-    size: string;
-  };
-}
+import { IParkingLotSize } from '../../src/common/interfaces';
 
 export const parking1x3: Array<IParkingLotSize> = [
   {
