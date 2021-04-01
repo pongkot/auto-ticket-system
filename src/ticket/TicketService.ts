@@ -48,7 +48,6 @@ export class TicketService implements ITicketService {
           availableSlotList,
         );
       }),
-      tap((e) => console.log(e)),
       mergeMap((ticket: { ticketId: string }) =>
         this.parkingLotStageService
           .searchParkingSlotByTicketId(ticket.ticketId)
