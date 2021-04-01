@@ -6,6 +6,10 @@ const ENV = process.env;
 
 export const config: IConfig = {
   parkingLotSize: { 3: parking1x3, 4: parking1x4 },
+  gateAddress: {
+    lat: 0,
+    long: 0,
+  },
   database: {
     autoTicketSystem: {
       host: _.get(ENV, 'AUTO_TICKET_SYSTEM_DB_HOST', 'localhost'),

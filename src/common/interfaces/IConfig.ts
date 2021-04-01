@@ -9,4 +9,8 @@ export interface IConfig {
     3: Array<IParkingLotSize>;
     4: Array<IParkingLotSize>;
   };
+  gateAddress: {
+    lat: number;
+    long: number;
+  };
 }
