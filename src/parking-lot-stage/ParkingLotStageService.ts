@@ -5,7 +5,7 @@ import { CONFIG, Mapping, Repository } from '../constants';
 import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
-import { filter, map, mergeMap, reduce, toArray } from 'rxjs/operators';
+import { filter, map, mergeMap, reduce, tap, toArray } from 'rxjs/operators';
 import { ObjectId } from 'mongodb';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
@@ -67,20 +67,23 @@ export class ParkingLotStageService implements IParkingLotStageService {
     );
   }
 
-  listAvailableParkingLot(): Observable<any> {
-    return this.parkingLotStageRepository.listParkingLotStage().pipe(
-      filter((Doc: ParkingLotStageModel) => _.eq(Doc.getAvailable(), true)),
-      map((Doc: ParkingLotStageModel) => {
-        return {
-          Doc,
-          distance: this.getDistanceFromGate(Doc.getSlotAddress()),
-        };
-      }),
-      toArray(),
-      map((Docs: Array<{ Doc: ParkingLotStageModel; distance: number }>) => {
-        return _.sortBy(Docs, 'distance')[0];
-      }),
-    );
+  listAvailableParkingLot(): Observable<ParkingLotStageModel> {
+    return this.parkingLotStageRepository
+      .listParkingLotStage()
+      .pipe(
+        filter((Doc: ParkingLotStageModel) => _.eq(Doc.getAvailable(), true)),
+      );
+    //   map((Doc: ParkingLotStageModel) => {
+    //     return {
+    //       Doc,
+    //       distance: this.getDistanceFromGate(Doc.getSlotAddress()),
+    //     };
+    //   }),
+    //   toArray(),
+    //   map((Docs: Array<{ Doc: ParkingLotStageModel; distance: number }>) => {
+    //     return _.sortBy(Docs, 'distance')[0];
+    //   }),
+    // );
   }
 
   private getDistanceFromGate(slotAddress: IAddress): number {
@@ -90,5 +93,20 @@ export class ParkingLotStageService implements IParkingLotStageService {
 
   private static getDistance(a: IAddress, b: IAddress): number {
     return Math.sqrt(Math.pow(a.lat - b.lat, 2) - Math.pow(a.long - b.long, 2));
+  }
+
+  listAvailableAndShortDistanceSlot(): Observable<ParkingLotStageModel> {
+    return this.listAvailableParkingLot().pipe(
+      map((Doc: ParkingLotStageModel) => {
+        return {
+          Doc,
+          distance: this.getDistanceFromGate(Doc.getSlotAddress()),
+        };
+      }),
+      toArray(),
+      map((Docs: Array<{ Doc: ParkingLotStageModel; distance: number }>) => {
+        return _.sortBy(Docs, 'distance')[0].Doc;
+      }),
+    );
   }
 }

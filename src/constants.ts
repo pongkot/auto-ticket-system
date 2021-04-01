@@ -8,6 +8,7 @@ export const enum Mapping {
 
 export const enum Service {
   PARKING_LOT_STAGE = 'ParkingLotStageService',
+  TICKET = 'TicketService',
 }
 
 export const CONFIG = 'configuration';

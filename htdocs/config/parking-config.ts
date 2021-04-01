@@ -4,8 +4,8 @@ export const parking1x3: Array<IParkingLotSize> = [
   {
     slotId: 'A-1',
     slotAddress: {
-      lat: 0,
-      long: 1,
+      lat: 1,
+      long: 0,
     },
     available: true,
     assign: {
@@ -17,8 +17,8 @@ export const parking1x3: Array<IParkingLotSize> = [
   {
     slotId: 'A-2',
     slotAddress: {
-      lat: 0,
-      long: 2,
+      lat: 2,
+      long: 0,
     },
     available: true,
     assign: {
@@ -30,8 +30,8 @@ export const parking1x3: Array<IParkingLotSize> = [
   {
     slotId: 'A-3',
     slotAddress: {
-      lat: 0,
-      long: 3,
+      lat: 3,
+      long: 0,
     },
     available: true,
     assign: {
@@ -46,8 +46,8 @@ export const parking1x4: Array<IParkingLotSize> = [
   {
     slotId: 'A-1',
     slotAddress: {
-      lat: 0,
-      long: 1,
+      lat: 1,
+      long: 0,
     },
     available: true,
     assign: {
@@ -59,8 +59,8 @@ export const parking1x4: Array<IParkingLotSize> = [
   {
     slotId: 'A-2',
     slotAddress: {
-      lat: 0,
-      long: 2,
+      lat: 2,
+      long: 0,
     },
     available: true,
     assign: {
@@ -72,8 +72,8 @@ export const parking1x4: Array<IParkingLotSize> = [
   {
     slotId: 'A-3',
     slotAddress: {
-      lat: 0,
-      long: 3,
+      lat: 3,
+      long: 0,
     },
     available: true,
     assign: {
@@ -85,8 +85,8 @@ export const parking1x4: Array<IParkingLotSize> = [
   {
     slotId: 'A-4',
     slotAddress: {
-      lat: 0,
-      long: 4,
+      lat: 4,
+      long: 0,
     },
     available: true,
     assign: {
