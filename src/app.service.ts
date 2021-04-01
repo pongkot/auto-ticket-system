@@ -71,6 +71,10 @@ export class AppService extends Mongo<any> {
     return of(distance);
   }
 
+  getDistance(a: { x: number; y: number }, b: { x: number; y: number }) {
+    return Math.sqrt(Math.pow(a.x - b.x, 2) - Math.pow(a.y - b.y, 2));
+  }
+
   createTicket(licencePlate: string, slot: any): Observable<any> {
     const _id = new ObjectId(slot._id);
     return of(_id).pipe(
@@ -111,6 +115,26 @@ export class AppService extends Mongo<any> {
         message: 'slot avaliable',
         avaliable: _.size(docs),
       })),
+    );
+  }
+
+  forMSize(): Observable<any> {
+    const cursor = this.collection('parkingLotStage').find({ available: true });
+    return from(cursor).pipe(
+      map((docs: Array<any>) => {
+        let m = 0;
+        for (let i = 0, j = 1; i < _.size(docs); i++, j++) {
+          if (docs[j]) {
+            if (
+              this.getDistance(docs[i].slotAddress, docs[j].slotAddress) === 1
+            ) {
+              m += 1;
+              i += 1;
+            }
+          }
+        }
+        return m;
+      }),
     );
   }
 }

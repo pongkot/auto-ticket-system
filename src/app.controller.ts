@@ -52,4 +52,9 @@ export class AppController {
   getParkingLotStatus(): Observable<any> {
     return this.appService.getAvaliableSlot();
   }
+
+  @Get('status-m')
+  getStatuslotForMSize(): Observable<any> {
+    return this.appService.forMSize();
+  }
 }
