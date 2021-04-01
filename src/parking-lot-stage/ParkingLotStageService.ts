@@ -115,4 +115,11 @@ export class ParkingLotStageService implements IParkingLotStageService {
       map((docs: Array<ParkingLotStageModel>) => ({ available: _.size(docs) })),
     );
   }
+
+  parkingActivate(
+    carDoc: { licencePlate: string; carSize: 's' | 'm' | 'l' },
+    availableSlot: ParkingLotStageModel,
+  ) {
+    //
+  }
 }
