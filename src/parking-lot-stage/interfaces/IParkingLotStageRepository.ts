@@ -1,9 +1,7 @@
 import { Observable } from 'rxjs';
 import { InsertWriteOpResult } from 'mongodb';
-import { IParkingLotStageSchema } from '../../../htdocs/database/auto-ticket-system';
+import { ParkingLotStageModel } from '../ParkingLotStageModel';
 
 export interface IParkingLotStageRepository {
-  createParkingLotStage(
-    doc: IParkingLotStageSchema,
-  ): Observable<InsertWriteOpResult<{ _id: string }>>;
+  createParkingLotStage(Doc: ParkingLotStageModel): Observable<any>;
 }

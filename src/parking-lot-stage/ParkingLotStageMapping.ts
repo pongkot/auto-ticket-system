@@ -1,7 +1,7 @@
 import { MappingCore } from '../common';
-import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
-import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { Injectable } from '@nestjs/common';
+import { ParkingLotStageModel } from './ParkingLotStageModel';
+import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
 
 @Injectable()
 export class ParkingLotStageMapping extends MappingCore<

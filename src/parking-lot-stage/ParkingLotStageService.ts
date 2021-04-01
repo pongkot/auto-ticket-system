@@ -5,9 +5,10 @@ import { CONFIG, Mapping, Repository } from '../constants';
 import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
-import { map, tap } from 'rxjs/operators';
-import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
+import { map, mergeMap, tap } from 'rxjs/operators';
 import { ObjectId } from 'mongodb';
+import { ParkingLotStageModel } from './ParkingLotStageModel';
+import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
 
 @Injectable()
 export class ParkingLotStageService implements IParkingLotStageService {
@@ -46,7 +47,9 @@ export class ParkingLotStageService implements IParkingLotStageService {
       map((doc: IParkingLotStageSchema) =>
         this.parkingLotStageMapping.toModel(doc),
       ),
-      tap((e) => console.log(e)),
+      mergeMap((Doc: ParkingLotStageModel) =>
+        this.parkingLotStageRepository.createParkingLotStage(Doc),
+      ),
       map(() => {
         return { parkingLotId: [] };
       }),
