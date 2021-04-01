@@ -5,7 +5,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CONFIG, Mapping } from '../constants';
 import { IConfig } from '../common/interfaces';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
-import { map, mergeAll, mergeMap } from 'rxjs/operators';
+import { map, mergeAll, mergeMap, tap } from 'rxjs/operators';
 import {
   collectionName,
   IParkingLotStageSchema,
@@ -61,5 +61,15 @@ export class ParkingLotStageRepository
         this.parkingLotStageMapping.toModel(doc),
       ),
     );
+  }
+
+  updateParkingLotStage<IFilter, IUpdateValue>(
+    filter: IFilter,
+    doc: IUpdateValue,
+  ): Observable<any> {
+    const cursor = this.collection(
+      collectionName.PARKING_LOT_STAGE,
+    ).updateOne(filter, { $set: doc });
+    return from(cursor).pipe(tap((e) => console.log(e)));
   }
 }

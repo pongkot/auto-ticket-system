@@ -8,4 +8,9 @@ export interface IParkingLotStageRepository {
   ): Observable<{ _id: ObjectId }>;
 
   listParkingLotStage(): Observable<ParkingLotStageModel>;
+
+  updateParkingLotStage<IFilter, IUpdateValue>(
+    filter: IFilter,
+    doc: IUpdateValue,
+  ): Observable<any>;
 }
