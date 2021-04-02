@@ -1,12 +1,10 @@
 import { Body, Controller, Get, Inject, Logger, Post } from '@nestjs/common';
-import { CONFIG, Service } from '../constants';
+import { Service } from '../constants';
 import { IParkingLotStageService } from './interfaces/IParkingLotStageService';
-import { Observable, of, zip } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ObjectId } from 'mongodb';
 import { CreateParkingLotDto } from './dto/CreateParkingLotDto';
-import { IConfig } from '../common/interfaces';
-import { map, tap } from 'rxjs/operators';
-import { doc } from 'prettier';
+import { map } from 'rxjs/operators';
 
 @Controller('parking-lot-stage')
 export class ParkingLotStageController {
@@ -15,8 +13,6 @@ export class ParkingLotStageController {
   constructor(
     @Inject(Service.PARKING_LOT_STAGE)
     private readonly parkingLotStageService: IParkingLotStageService,
-    @Inject(CONFIG)
-    private readonly config: IConfig,
   ) {}
 
   @Post()
