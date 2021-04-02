@@ -3,9 +3,10 @@ import { AppController } from './AppController';
 import { AppService } from './AppService';
 import { ParkingLotStageModule } from './parking-lot-stage/ParkingLotStageModule';
 import { TicketModule } from './ticket/TicketModule';
+import { ReportModule } from './report/ReportModule';
 
 @Module({
-  imports: [ParkingLotStageModule, TicketModule],
+  imports: [ParkingLotStageModule, TicketModule, ReportModule],
   controllers: [AppController],
   providers: [AppService],
 })
