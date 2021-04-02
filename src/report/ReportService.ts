@@ -1,8 +1,11 @@
 import { IReportService } from './interfaces/IReportService';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Repository } from '../constants';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IParkingLotStageRepository } from '../parking-lot-stage/interfaces/IParkingLotStageRepository';
+import { filter, map, toArray } from 'rxjs/operators';
+import { ParkingLotStageModel } from '../parking-lot-stage/ParkingLotStageModel';
+import * as _ from 'lodash';
 
 @Injectable()
 export class ReportService implements IReportService {
@@ -13,7 +16,20 @@ export class ReportService implements IReportService {
     private readonly parkingLotStageRepository: IParkingLotStageRepository,
   ) {}
 
-  getLicencePlateByCarSize(size: 's' | 'm' | 'l'): Observable<any> {
-    return this.parkingLotStageRepository.listParkingLotStage();
+  // TODO refactor
+  getLicencePlateByCarSize(size: 's' | 'm' | 'l'): Observable<Array<string>> {
+    return this.parkingLotStageRepository.listParkingLotStage().pipe(
+      filter((Slot: ParkingLotStageModel) => _.eq(Slot.getAvailable(), false)),
+      toArray(),
+      map((list) => _.groupBy(list, 'carSize')[size]),
+      map((list) => {
+        if (list) {
+          return list.map((doc) => doc.getLicencePlate());
+        } else {
+          return [];
+        }
+      }),
+      map((list) => _.uniq(list)),
+    );
   }
 }
