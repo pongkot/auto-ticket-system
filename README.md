@@ -1,7 +1,7 @@
 # Automated Ticketing System
 
 A web API for create parking, check-in to park, check-out to leave and show parking status for example available lot for
-car by size (s, m and l)
+car by size (small, medium and large)
 
 # Environments
 
@@ -16,6 +16,9 @@ AUTO_TICKET_SYSTEM_DB_NAME
 # Scripts
 
 ```shell
+# Build docker image
+docker build -t system/auto-ticket:0.1 .
+
 # Start application on stack
 docker-composer up
 
@@ -25,6 +28,9 @@ yarn test
 # Coverage test
 yarn test:cov
 ```
+# Assumption
+
+lorem
 
 # Getting Started
 
