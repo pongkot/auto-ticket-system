@@ -25,7 +25,6 @@ export class TicketService implements ITicketService {
     private readonly parkingLotStageRepository: IParkingLotStageRepository,
   ) {}
 
-  // TODO refactor
   createTicket(
     licencePlate: string,
     carSize: 's' | 'm' | 'l',
@@ -34,8 +33,8 @@ export class TicketService implements ITicketService {
       .searchParkingLotStage({ 'assign.licencePlate': licencePlate })
       .pipe(
         toArray(),
-        tap((e) => {
-          if (_.size(e) >= 1) {
+        tap((parkingLotList: Array<ParkingLotStageModel>) => {
+          if (_.size(parkingLotList) >= 1) {
             throw new HttpException(
               'Licence plate has been used',
               HttpStatus.BAD_REQUEST,
@@ -82,47 +81,6 @@ export class TicketService implements ITicketService {
             ),
         ),
       );
-
-    // return this.parkingLotStageService.listAvailableParkingLot().pipe(
-    //   toArray(),
-    //   mergeMap((slotList: Array<ParkingLotStageModel>) =>
-    //     this.parkingLotStageService.observeSlotForCarSize(slotList, carSize),
-    //   ),
-    //   mergeMap((slot: { available: number }) => {
-    //     if (slot.available <= 0) {
-    //       throw new HttpException(
-    //         'No available parking lot',
-    //         HttpStatus.NOT_FOUND,
-    //       );
-    //     }
-    //     return this.parkingLotStageService.rangingAvailableAndShortDistanceSlot();
-    //   }),
-    //   mergeMap((availableSlotList: Array<ParkingLotStageModel>) => {
-    //     const carDoc = {
-    //       licencePlate,
-    //       carSize,
-    //     };
-    //     return this.parkingLotStageService.parkingActivate(
-    //       carDoc,
-    //       availableSlotList,
-    //     );
-    //   }),
-    //   mergeMap((ticket: { ticketId: string }) =>
-    //     this.parkingLotStageService
-    //       .searchParkingSlotByTicketId(ticket.ticketId)
-    //       .pipe(
-    //         toArray(),
-    //         map((slotsList: Array<ParkingLotStageModel>) => {
-    //           return {
-    //             ticketId: ticket.ticketId,
-    //             yourSlot: slotsList.map((Doc: ParkingLotStageModel) =>
-    //               Doc.getSlotId(),
-    //             ),
-    //           };
-    //         }),
-    //       ),
-    //   ),
-    // );
   }
 
   leaveTicket(ticketId: string): Observable<{ message: string }> {
