@@ -9,13 +9,17 @@ import { Mapping, Repository, Service } from '../../constants';
 import { IParkingLotStageRepository } from '../interfaces/IParkingLotStageRepository';
 import { from } from 'rxjs';
 import { ParkingLotStageModel } from '../ParkingLotStageModel';
-import { toArray } from 'rxjs/operators';
+import { map, toArray } from 'rxjs/operators';
 import { mockDataSetAllAvailable } from './mock-data/mockDataSetAllAvailable';
 import { mockDateSetLat2Unavailable } from './mock-data/mockDateSetLat2Unavailable';
+import { mockUnsortedDataSetAllAvailable } from './mock-data/mockUnsortedDataSetAllAvailable';
+import * as _ from 'lodash';
+import { mockUnsortedDataSetLat1Unavailable } from './mock-data/mockUnsortedDataSetLat1Unavailable';
 
 describe('ParkingLotStageService', () => {
   let parkingLotStageService: IParkingLotStageService;
   let parkingLotStageRepository: IParkingLotStageRepository;
+  let parkingLotStageMapping: ParkingLotStageMapping;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -42,6 +46,9 @@ describe('ParkingLotStageService', () => {
     );
     parkingLotStageRepository = moduleRef.get<IParkingLotStageRepository>(
       ParkingLotStageRepository,
+    );
+    parkingLotStageMapping = moduleRef.get<ParkingLotStageMapping>(
+      ParkingLotStageMapping,
     );
   });
 
@@ -129,6 +136,38 @@ describe('ParkingLotStageService', () => {
         .observeSlotForCarSize(mockDateSetLat2Unavailable, 'l')
         .toPromise();
       expect(result).toStrictEqual({ available: 0 });
+    });
+  });
+
+  describe('::rangingAvailableAndShortDistanceSlot', () => {
+    it('parking lot (3 doc) unsorted (available all) then get 3 slot and sort by short distance', async () => {
+      jest
+        .spyOn(parkingLotStageRepository, 'listParkingLotStage')
+        .mockImplementation(() => from(mockUnsortedDataSetAllAvailable));
+
+      const result = await parkingLotStageService
+        .rangingAvailableAndShortDistanceSlot()
+        .toPromise();
+
+      expect(result).toStrictEqual(
+        _.sortBy(mockUnsortedDataSetAllAvailable, 'slotAddressLat'),
+      );
+    });
+
+    it('parking lot (3 doc) unsorted (lat 1 unavailable) then get 2 slot and sort by short distance', async () => {
+      jest
+        .spyOn(parkingLotStageRepository, 'listParkingLotStage')
+        .mockImplementation(() => from(mockUnsortedDataSetLat1Unavailable));
+
+      const result = await parkingLotStageService
+        .rangingAvailableAndShortDistanceSlot()
+        .toPromise();
+
+      const expectedDoc = mockUnsortedDataSetAllAvailable.filter(
+        (doc) => doc.getSlotAddressLat() > 1,
+      );
+
+      expect(result).toStrictEqual(_.sortBy(expectedDoc, 'slotAddressLat'));
     });
   });
 });
