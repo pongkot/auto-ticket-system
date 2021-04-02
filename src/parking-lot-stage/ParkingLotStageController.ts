@@ -6,6 +6,25 @@ import { ObjectId } from 'mongodb';
 import { CreateParkingLotDto } from './dto/CreateParkingLotDto';
 import { map } from 'rxjs/operators';
 
+interface IA {
+  capacity: number;
+  parking: {
+    s: number;
+    m: number;
+    l: number;
+    total: number;
+  };
+  available: {
+    s: number;
+    m: number;
+    l: number;
+  };
+}
+
+interface IB extends IA {
+  subject: string;
+}
+
 @Controller('parking-lot-stage')
 export class ParkingLotStageController {
   private readonly logger: Logger = new Logger('ParkingLotStageController');
@@ -23,23 +42,9 @@ export class ParkingLotStageController {
   }
 
   @Get('status')
-  getParkingLotStatus(): Observable<{
-    subject: string;
-    capacity: number;
-    parking: {
-      s: number;
-      m: number;
-      l: number;
-      total: number;
-    };
-    available: {
-      s: number;
-      m: number;
-      l: number;
-    };
-  }> {
+  getParkingLotStatus(): Observable<IB> {
     return this.parkingLotStageService.getSummaryParkingLotStage().pipe(
-      map((result) => ({
+      map((result: IA) => ({
         subject: 'Parking lot status',
         ...result,
       })),
