@@ -10,11 +10,12 @@ import { IParkingLotStageRepository } from '../interfaces/IParkingLotStageReposi
 import { from } from 'rxjs';
 import { ParkingLotStageModel } from '../ParkingLotStageModel';
 import { toArray } from 'rxjs/operators';
+import { mockDataSetAllAvailable } from './mock-data/mockDataSetAllAvailable';
+import { mockDateSetLat2Unavailable } from './mock-data/mockDateSetLat2Unavailable';
 
 describe('ParkingLotStageService', () => {
   let parkingLotStageService: IParkingLotStageService;
   let parkingLotStageRepository: IParkingLotStageRepository;
-  // let parkingLotStageMapping: ParkingLotStageMapping;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -88,40 +89,32 @@ describe('ParkingLotStageService', () => {
   });
 
   describe('::observeSlotForCarSize', () => {
-    const mock = [
-      new ParkingLotStageModel()
-        .setAvailable(true)
-        .setSlotAddressLat(1)
-        .setSlotAddressLong(0),
-      new ParkingLotStageModel()
-        .setAvailable(true)
-        .setSlotAddressLat(2)
-        .setSlotAddressLong(0),
-      new ParkingLotStageModel()
-        .setAvailable(true)
-        .setSlotAddressLat(3)
-        .setSlotAddressLong(0),
-    ];
-
     it('parking lot size is 3 (available all) then get 3 car size S', async () => {
       const result = await parkingLotStageService
-        .observeSlotForCarSize(mock, 's')
+        .observeSlotForCarSize(mockDataSetAllAvailable, 's')
         .toPromise();
       expect(result).toStrictEqual({ available: 3 });
     });
 
     it('parking lot size is 3 (available all) then get 1 car size M', async () => {
       const result = await parkingLotStageService
-        .observeSlotForCarSize(mock, 'm')
+        .observeSlotForCarSize(mockDataSetAllAvailable, 'm')
         .toPromise();
       expect(result).toStrictEqual({ available: 1 });
     });
 
     it('parking lot size is 3 (available all) then get 1 car size L', async () => {
       const result = await parkingLotStageService
-        .observeSlotForCarSize(mock, 'l')
+        .observeSlotForCarSize(mockDataSetAllAvailable, 'l')
         .toPromise();
       expect(result).toStrictEqual({ available: 1 });
+    });
+
+    it('parking lost size is 3 (lat 2 unavailable) then get 2 car size S', async () => {
+      const result = await parkingLotStageService
+        .observeSlotForCarSize(mockDateSetLat2Unavailable, 's')
+        .toPromise();
+      expect(result).toStrictEqual({ available: 2 });
     });
   });
 });
