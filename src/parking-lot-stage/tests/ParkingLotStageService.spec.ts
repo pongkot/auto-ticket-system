@@ -44,7 +44,7 @@ describe('ParkingLotStageService', () => {
     );
   });
 
-  describe('listAvailableParkingLot', () => {
+  describe('::listAvailableParkingLot', () => {
     it('parking lot size is 3 (available all) then retrieve get 3 parking lot', async () => {
       const mock = [
         new ParkingLotStageModel().setAvailable(true),
@@ -84,6 +84,44 @@ describe('ParkingLotStageService', () => {
         new ParkingLotStageModel().setAvailable(true),
         new ParkingLotStageModel().setAvailable(true),
       ]);
+    });
+  });
+
+  describe('::observeSlotForCarSize', () => {
+    const mock = [
+      new ParkingLotStageModel()
+        .setAvailable(true)
+        .setSlotAddressLat(1)
+        .setSlotAddressLong(0),
+      new ParkingLotStageModel()
+        .setAvailable(true)
+        .setSlotAddressLat(2)
+        .setSlotAddressLong(0),
+      new ParkingLotStageModel()
+        .setAvailable(true)
+        .setSlotAddressLat(3)
+        .setSlotAddressLong(0),
+    ];
+
+    it('parking lot size is 3 (available all) then get 3 car size S', async () => {
+      const result = await parkingLotStageService
+        .observeSlotForCarSize(mock, 's')
+        .toPromise();
+      expect(result).toStrictEqual({ available: 3 });
+    });
+
+    it('parking lot size is 3 (available all) then get 1 car size M', async () => {
+      const result = await parkingLotStageService
+        .observeSlotForCarSize(mock, 'm')
+        .toPromise();
+      expect(result).toStrictEqual({ available: 1 });
+    });
+
+    it('parking lot size is 3 (available all) then get 1 car size L', async () => {
+      const result = await parkingLotStageService
+        .observeSlotForCarSize(mock, 'l')
+        .toPromise();
+      expect(result).toStrictEqual({ available: 1 });
     });
   });
 });
