@@ -118,13 +118,13 @@
 			"name": "Create ticket",
 			"item": [
 				{
-					"name": "Create ticket with car size S",
+					"name": "Create ticket with car size S - L-22AA",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"carSize\": \"s\",\r\n    \"licencePlate\": \"abc123\"\r\n}",
+							"raw": "{\r\n    \"carSize\": \"s\",\r\n    \"licencePlate\": \"L-22AA\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -144,13 +144,13 @@
 					"response": []
 				},
 				{
-					"name": "Create ticket with car size M",
+					"name": "Create ticket with car size S - L-88AA",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"carSize\": \"m\",\r\n    \"licencePlate\": \"abc123\"\r\n}",
+							"raw": "{\r\n    \"carSize\": \"s\",\r\n    \"licencePlate\": \"L-88AA\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -170,13 +170,247 @@
 					"response": []
 				},
 				{
-					"name": "Create ticket with car size L",
+					"name": "Create ticket with car size S - L-94AA",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"carSize\": \"l\",\r\n    \"licencePlate\": \"abc123\"\r\n}",
+							"raw": "{\r\n    \"carSize\": \"s\",\r\n    \"licencePlate\": \"L-94AA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/ticket",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ticket with car size S - L-17AA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"carSize\": \"s\",\r\n    \"licencePlate\": \"L-17AA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/ticket",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ticket with car size M - L-23AA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"carSize\": \"m\",\r\n    \"licencePlate\": \"L-23AA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/ticket",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ticket with car size M - L-59AA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"carSize\": \"m\",\r\n    \"licencePlate\": \"L-59AA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/ticket",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ticket with car size M - L-67AA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"carSize\": \"m\",\r\n    \"licencePlate\": \"L-67AA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/ticket",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ticket with car size M - L-26AA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"carSize\": \"m\",\r\n    \"licencePlate\": \"L-26AA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/ticket",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ticket with car size L - L-77AA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"carSize\": \"l\",\r\n    \"licencePlate\": \"L-77AA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/ticket",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ticket with car size L - L-24AA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"carSize\": \"l\",\r\n    \"licencePlate\": \"L-24AA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/ticket",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ticket with car size L - L-56AA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"carSize\": \"l\",\r\n    \"licencePlate\": \"L-56AA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/ticket",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ticket with car size L - L-43AA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"carSize\": \"l\",\r\n    \"licencePlate\": \"L-43AA\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -281,6 +515,30 @@
 					"path": [
 						"parking-lot-stage",
 						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search licence plate by car size",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/report/licence-plate?size=l",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"report",
+						"licence-plate"
+					],
+					"query": [
+						{
+							"key": "size",
+							"value": "l"
+						}
 					]
 				}
 			},
