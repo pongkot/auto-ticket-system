@@ -1,30 +1,43 @@
-import { Controller, Get, Inject, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Query,
+} from '@nestjs/common';
 import { AppService } from './AppService';
-import { Service } from './constants';
-import { IParkingLotStageService } from './parking-lot-stage/interfaces/IParkingLotStageService';
 import * as _ from 'lodash';
+import { map } from 'rxjs/operators';
 
 @Controller()
 export class AppController {
-  constructor(
-    private readonly appService: AppService,
-    @Inject(Service.PARKING_LOT_STAGE)
-    private readonly parkingLotStageService: IParkingLotStageService,
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   @Get()
   getHello(): string {
     return this.appService.getHello();
   }
 
-  @Get('available')
+  @Get('slot/available')
   getAvailableStatus(@Query('size') size: 's' | 'm' | 'l' | 'all') {
     if (!size) {
       size = 'all';
     }
 
-    if (['s', 'm', 'l', 'all'].find((i: string) => _.eq(i, size))) {
-      //
+    if (!['s', 'm', 'l', 'all'].find((i: string) => _.eq(i, size))) {
+      throw new HttpException(
+        'size must be one of the following values: s, m, l, all',
+        HttpStatus.BAD_REQUEST,
+      );
     }
+
+    return this.appService.getAvailableParkingLotByCarSize(size).pipe(
+      map((result) => {
+        return {
+          subject: `Available parking lot for car size ${_.toUpper(size)}`,
+          slot: result,
+        };
+      }),
+    );
   }
 }
