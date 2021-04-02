@@ -308,22 +308,28 @@ export class ParkingLotStageService implements IParkingLotStageService {
     return parkingLotStageList.pipe(
       toArray(),
       mergeMap(async (list: Array<ParkingLotStageModel>) => {
-        const avaliableList = list.filter((doc) =>
+        const availableList = list.filter((doc) =>
           _.eq(doc.getAvailable(), true),
         );
         const capacity = _.size(list);
         const parkingListBySize = _.groupBy(list, 'carSize');
-        const parkingListBySSize = _.size(parkingListBySize['s']);
-        const parkingListByMSize = _.size(parkingListBySize['m']);
-        const parkingListByLSize = _.size(parkingListBySize['l']);
+        const parkingListBySSize = ParkingLotStageService.getParkingSize(
+          parkingListBySize['s'],
+        );
+        const parkingListByMSize = ParkingLotStageService.getParkingSize(
+          parkingListBySize['m'],
+        );
+        const parkingListByLSize = ParkingLotStageService.getParkingSize(
+          parkingListBySize['l'],
+        );
         const availableCarSSize = await this.observeSlotForCarSSize(
-          avaliableList,
+          availableList,
         ).toPromise();
         const availableCarMSize = await this.observeSlotForCarMSize(
-          avaliableList,
+          availableList,
         ).toPromise();
         const availableCarLSize = await this.observeSlotForCarLSize(
-          avaliableList,
+          availableList,
         ).toPromise();
         return {
           capacity,
@@ -345,5 +351,9 @@ export class ParkingLotStageService implements IParkingLotStageService {
         };
       }),
     );
+  }
+
+  private static getParkingSize(list: Array<any>) {
+    return _.size(_.groupBy(list, 'ticketId'));
   }
 }
