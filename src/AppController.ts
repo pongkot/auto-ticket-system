@@ -1,7 +1,8 @@
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Controller, Get, Inject, Query } from '@nestjs/common';
 import { AppService } from './AppService';
 import { Service } from './constants';
 import { IParkingLotStageService } from './parking-lot-stage/interfaces/IParkingLotStageService';
+import * as _ from 'lodash';
 
 @Controller()
 export class AppController {
@@ -14,5 +15,16 @@ export class AppController {
   @Get()
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @Get('available')
+  getAvailableStatus(@Query('size') size: 's' | 'm' | 'l' | 'all') {
+    if (!size) {
+      size = 'all';
+    }
+
+    if (['s', 'm', 'l', 'all'].find((i: string) => _.eq(i, size))) {
+      //
+    }
   }
 }
