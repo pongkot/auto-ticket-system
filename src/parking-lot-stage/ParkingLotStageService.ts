@@ -6,25 +6,16 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { from, Observable, of, zip } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { CONFIG, Mapping, Repository } from '../constants';
 import { IConfig, IParkingLotSize } from '../common/interfaces';
 import { IParkingLotStageRepository } from './interfaces/IParkingLotStageRepository';
 import { ParkingLotStageMapping } from './ParkingLotStageMapping';
-import {
-  filter,
-  map,
-  mergeAll,
-  mergeMap,
-  reduce,
-  tap,
-  toArray,
-} from 'rxjs/operators';
+import { filter, map, mergeMap, reduce, toArray } from 'rxjs/operators';
 import { ObjectId, UpdateWriteOpResult } from 'mongodb';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { IParkingLotStageSchema } from '../htdocs/database/auto-ticket-system';
 import * as _ from 'lodash';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 interface IAddress {
   lat: number;
@@ -34,13 +25,6 @@ interface IAddress {
 interface IA {
   Doc: ParkingLotStageModel;
   distance: number;
-}
-
-interface IB {
-  s: number;
-  m: number;
-  l: number;
-  total: number;
 }
 
 @Injectable()
@@ -200,6 +184,7 @@ export class ParkingLotStageService implements IParkingLotStageService {
     );
   }
 
+  // TODO refactor
   private observeSlotForCarLSize(
     slotList: Array<ParkingLotStageModel>,
   ): Observable<{ available: number }> {
@@ -207,21 +192,22 @@ export class ParkingLotStageService implements IParkingLotStageService {
       filter((slot: ParkingLotStageModel) => _.eq(slot.getAvailable(), true)),
       toArray(),
       map((docs: Array<ParkingLotStageModel>) => {
+        const a = _.sortBy(docs, 'slotAddressLat');
         let m = 0;
-        for (let i = 0, j = 1, k = 2; i < _.size(docs); i++, j++, k++) {
-          if (docs[k]) {
+        for (let i = 0, j = 1, k = 2; i < _.size(a); i++, j++, k++) {
+          if (a[k]) {
             if (
               _.eq(
                 ParkingLotStageService.getDistance(
-                  docs[i].getSlotAddress(),
-                  docs[j].getSlotAddress(),
+                  a[i].getSlotAddress(),
+                  a[j].getSlotAddress(),
                 ),
                 1,
               ) &&
               _.eq(
                 ParkingLotStageService.getDistance(
-                  docs[j].getSlotAddress(),
-                  docs[k].getSlotAddress(),
+                  a[j].getSlotAddress(),
+                  a[k].getSlotAddress(),
                 ),
                 1,
               )
