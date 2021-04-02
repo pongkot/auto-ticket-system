@@ -1,4 +1,4 @@
-import { IParkingLotSize } from '../../src/common/interfaces';
+import { IParkingLotSize } from '../../common/interfaces';
 
 export const parking1x3: Array<IParkingLotSize> = [
   {

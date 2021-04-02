@@ -22,7 +22,7 @@ import {
 } from 'rxjs/operators';
 import { ObjectId, UpdateWriteOpResult } from 'mongodb';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
-import { IParkingLotStageSchema } from '../../htdocs/database/auto-ticket-system';
+import { IParkingLotStageSchema } from '../htdocs/database/auto-ticket-system';
 import * as _ from 'lodash';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 

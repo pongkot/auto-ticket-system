@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { IConfig } from './interfaces';
-import { parking1x3, parking1x4 } from '../../htdocs/config';
+import { parking1x3, parking1x4 } from '../htdocs/config';
 
 const ENV = process.env;
 

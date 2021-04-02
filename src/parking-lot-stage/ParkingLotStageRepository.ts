@@ -9,7 +9,7 @@ import { map, mergeAll, mergeMap } from 'rxjs/operators';
 import {
   collectionName,
   IParkingLotStageSchema,
-} from '../../htdocs/database/auto-ticket-system';
+} from '../htdocs/database/auto-ticket-system';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { InsertOneWriteOpResult, ObjectId, UpdateWriteOpResult } from 'mongodb';
 
