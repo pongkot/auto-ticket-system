@@ -7,8 +7,6 @@ export interface IParkingLotStageService {
 
   listAvailableParkingLot(): Observable<ParkingLotStageModel>;
 
-  listAvailableAndShortDistanceSlot(): Observable<ParkingLotStageModel>;
-
   observeSlotForCarSize(
     slotList: Array<ParkingLotStageModel>,
     carSize: 's' | 'm' | 'l',

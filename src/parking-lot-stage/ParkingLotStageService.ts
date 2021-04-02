@@ -95,21 +95,6 @@ export class ParkingLotStageService implements IParkingLotStageService {
     return Math.sqrt(Math.pow(a.lat - b.lat, 2) - Math.pow(a.long - b.long, 2));
   }
 
-  listAvailableAndShortDistanceSlot(): Observable<ParkingLotStageModel> {
-    return this.listAvailableParkingLot().pipe(
-      map((Doc: ParkingLotStageModel) => {
-        return {
-          Doc,
-          distance: this.getDistanceFromGate(Doc.getSlotAddress()),
-        };
-      }),
-      toArray(),
-      map((Docs: Array<{ Doc: ParkingLotStageModel; distance: number }>) => {
-        return _.sortBy(Docs, 'distance')[0].Doc;
-      }),
-    );
-  }
-
   rangingAvailableAndShortDistanceSlot(): Observable<
     Array<ParkingLotStageModel>
   > {

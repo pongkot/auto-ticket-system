@@ -170,4 +170,26 @@ describe('ParkingLotStageService', () => {
       expect(result).toStrictEqual(_.sortBy(expectedDoc, 'slotAddressLat'));
     });
   });
+
+  // describe('::listAvailableAndShortDistanceSlot', () => {
+  //   it('parking lot (3 doc) unsorted (available all) then get 3 slot and sort short distance', async () => {
+  //     jest
+  //       .spyOn(parkingLotStageRepository, 'listParkingLotStage')
+  //       .mockImplementation(() => from(mockUnsortedDataSetAllAvailable));
+  //
+  //     const received = await parkingLotStageService
+  //       .listAvailableAndShortDistanceSlot()
+  //       .pipe(toArray())
+  //       .toPromise();
+  //
+  //     const expected = _.sortBy(
+  //       mockUnsortedDataSetAllAvailable,
+  //       'slotAddressLat',
+  //     );
+  //
+  //     console.log({ received, expected });
+  //
+  //     expect(received).toStrictEqual(expected);
+  //   });
+  // });
 });
