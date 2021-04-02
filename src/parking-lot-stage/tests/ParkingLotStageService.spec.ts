@@ -116,5 +116,19 @@ describe('ParkingLotStageService', () => {
         .toPromise();
       expect(result).toStrictEqual({ available: 2 });
     });
+
+    it('parking lost size is 3 (lat 2 unavailable) then get 0 car size M', async () => {
+      const result = await parkingLotStageService
+        .observeSlotForCarSize(mockDateSetLat2Unavailable, 'm')
+        .toPromise();
+      expect(result).toStrictEqual({ available: 0 });
+    });
+
+    it('parking lost size is 3 (lat 2 unavailable) then get 0 car size L', async () => {
+      const result = await parkingLotStageService
+        .observeSlotForCarSize(mockDateSetLat2Unavailable, 'l')
+        .toPromise();
+      expect(result).toStrictEqual({ available: 0 });
+    });
   });
 });
