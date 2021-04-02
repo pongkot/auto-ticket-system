@@ -27,6 +27,18 @@ interface IA {
   distance: number;
 }
 
+interface IB {
+  _id: ObjectId;
+  doc: {
+    assign: {
+      licencePlate: string;
+      carSize: string;
+      ticketId: string;
+    };
+    available: boolean;
+  };
+}
+
 @Injectable()
 export class ParkingLotStageService implements IParkingLotStageService {
   private readonly logger: Logger = new Logger('ParkingLotStageService');
@@ -236,7 +248,7 @@ export class ParkingLotStageService implements IParkingLotStageService {
     }
 
     return from(docs).pipe(
-      mergeMap((list) =>
+      mergeMap((list: IB) =>
         this.parkingLotStageRepository
           .updateParkingLotStage(
             {
