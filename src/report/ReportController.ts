@@ -31,7 +31,7 @@ export class ReportController {
   }> {
     if (['s', 'm', 'l'].find((doc: string) => _.eq(doc, size))) {
       return this.reportService.getLicencePlateByCarSize(size).pipe(
-        map((result) => ({
+        map((result: Array<string>) => ({
           subject: `Licence plate by car size ${_.toUpper(size)}`,
           licencePlateList: result,
         })),
