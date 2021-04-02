@@ -274,6 +274,7 @@ export class ParkingLotStageService implements IParkingLotStageService {
     });
   }
 
+  // TODO refactor
   getSummaryParkingLotStage(): Observable<any> {
     const parkingLotStageList = this.parkingLotStageRepository.listParkingLotStage();
     return parkingLotStageList.pipe(
@@ -324,6 +325,7 @@ export class ParkingLotStageService implements IParkingLotStageService {
     );
   }
 
+  // TODO refactor
   private static getParkingSize(list: Array<any>) {
     return _.size(_.groupBy(list, 'ticketId'));
   }

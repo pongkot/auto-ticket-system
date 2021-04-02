@@ -9,7 +9,7 @@ import { Mapping, Repository, Service } from '../../constants';
 import { IParkingLotStageRepository } from '../interfaces/IParkingLotStageRepository';
 import { from } from 'rxjs';
 import { ParkingLotStageModel } from '../ParkingLotStageModel';
-import { map, toArray } from 'rxjs/operators';
+import { toArray } from 'rxjs/operators';
 import { mockDataSetAllAvailable } from './mock-data/mockDataSetAllAvailable';
 import { mockDateSetLat2Unavailable } from './mock-data/mockDateSetLat2Unavailable';
 import { mockUnsortedDataSetAllAvailable } from './mock-data/mockUnsortedDataSetAllAvailable';
@@ -19,7 +19,6 @@ import { mockUnsortedDataSetLat1Unavailable } from './mock-data/mockUnsortedData
 describe('ParkingLotStageService', () => {
   let parkingLotStageService: IParkingLotStageService;
   let parkingLotStageRepository: IParkingLotStageRepository;
-  let parkingLotStageMapping: ParkingLotStageMapping;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -46,9 +45,6 @@ describe('ParkingLotStageService', () => {
     );
     parkingLotStageRepository = moduleRef.get<IParkingLotStageRepository>(
       ParkingLotStageRepository,
-    );
-    parkingLotStageMapping = moduleRef.get<ParkingLotStageMapping>(
-      ParkingLotStageMapping,
     );
   });
 
