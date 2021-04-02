@@ -16,6 +16,7 @@ import { ObjectId, UpdateWriteOpResult } from 'mongodb';
 import { ParkingLotStageModel } from './ParkingLotStageModel';
 import { IParkingLotStageSchema } from '../htdocs/database/auto-ticket-system';
 import * as _ from 'lodash';
+import { ISummaryParkingLotStage } from './interfaces/ISummaryParkingLotStage';
 
 interface IAddress {
   lat: number;
@@ -37,6 +38,12 @@ interface IB {
     };
     available: boolean;
   };
+}
+
+interface IC {
+  s: number;
+  m: number;
+  l: number;
 }
 
 @Injectable()
@@ -286,59 +293,66 @@ export class ParkingLotStageService implements IParkingLotStageService {
     });
   }
 
-  // TODO refactor
-  getSummaryParkingLotStage(): Observable<any> {
+  getSummaryParkingLotStage(): Observable<ISummaryParkingLotStage> {
     const parkingLotStageList = this.parkingLotStageRepository.listParkingLotStage();
     return parkingLotStageList.pipe(
       toArray(),
       mergeMap(async (list: Array<ParkingLotStageModel>) => {
-        const availableList = list.filter((doc) =>
+        const availableList = list.filter((doc: ParkingLotStageModel) =>
           _.eq(doc.getAvailable(), true),
         );
         const capacity = _.size(list);
-        const parkingListBySize = _.groupBy(list, 'carSize');
-        const parkingListBySSize = ParkingLotStageService.getParkingSize(
-          parkingListBySize['s'],
+        const parkingNow = ParkingLotStageService.getParkingNowGroupByCarSize(
+          list,
         );
-        const parkingListByMSize = ParkingLotStageService.getParkingSize(
-          parkingListBySize['m'],
+        const availableNow = await this.getSlotAvailableNowGroupByCarSize(
+          availableList,
         );
-        const parkingListByLSize = ParkingLotStageService.getParkingSize(
-          parkingListBySize['l'],
-        );
-        const availableCarSSize = await this.observeSlotForCarSSize(
-          availableList,
-        ).toPromise();
-        const availableCarMSize = await this.observeSlotForCarMSize(
-          availableList,
-        ).toPromise();
-        const availableCarLSize = await this.observeSlotForCarLSize(
-          availableList,
-        ).toPromise();
+        const parkingTotal = _.sum([parkingNow.s, parkingNow.m, parkingNow.l]);
         return {
           capacity,
           parking: {
-            s: parkingListBySSize,
-            m: parkingListByMSize,
-            l: parkingListByLSize,
-            total: _.sum([
-              parkingListByMSize,
-              parkingListBySSize,
-              parkingListByLSize,
-            ]),
+            small: parkingNow.s,
+            medium: parkingNow.m,
+            large: parkingNow.l,
+            total: parkingTotal,
           },
           available: {
-            s: availableCarSSize.available,
-            m: availableCarMSize.available,
-            l: availableCarLSize.available,
+            small: availableNow.s,
+            medium: availableNow.m,
+            large: availableNow.l,
           },
         };
       }),
     );
   }
 
-  // TODO refactor
-  private static getParkingSize(list: Array<any>) {
+  private static getParkingSize(list: any) {
     return _.size(_.groupBy(list, 'ticketId'));
+  }
+
+  private static getParkingNowGroupByCarSize(
+    list: Array<ParkingLotStageModel>,
+  ): IC {
+    const docs = _.groupBy(list, 'carSize');
+    const s: number = ParkingLotStageService.getParkingSize(docs['s']);
+    const m: number = ParkingLotStageService.getParkingSize(docs['m']);
+    const l: number = ParkingLotStageService.getParkingSize(docs['l']);
+    return { s, m, l };
+  }
+
+  private async getSlotAvailableNowGroupByCarSize(
+    list: Array<ParkingLotStageModel>,
+  ): Promise<IC> {
+    const s = await this.observeSlotForCarSSize(list)
+      .pipe(map((result) => result.available))
+      .toPromise();
+    const m = await this.observeSlotForCarMSize(list)
+      .pipe(map((result) => result.available))
+      .toPromise();
+    const l = await this.observeSlotForCarLSize(list)
+      .pipe(map((result) => result.available))
+      .toPromise();
+    return { s, m, l };
   }
 }

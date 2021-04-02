@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 import { ObjectId } from 'mongodb';
 import { ParkingLotStageModel } from '../ParkingLotStageModel';
+import { ISummaryParkingLotStage } from './ISummaryParkingLotStage';
 
 export interface IParkingLotStageService {
   createParkingLot(size: 3 | 4): Observable<{ parkingLotId: Array<ObjectId> }>;
@@ -23,18 +24,5 @@ export interface IParkingLotStageService {
     Array<ParkingLotStageModel>
   >;
 
-  getSummaryParkingLotStage(): Observable<{
-    capacity: number;
-    parking: {
-      s: number;
-      m: number;
-      l: number;
-      total: number;
-    };
-    available: {
-      s: number;
-      m: number;
-      l: number;
-    };
-  }>;
+  getSummaryParkingLotStage(): Observable<ISummaryParkingLotStage>;
 }

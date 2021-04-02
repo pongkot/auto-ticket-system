@@ -9,15 +9,15 @@ import { map } from 'rxjs/operators';
 interface IA {
   capacity: number;
   parking: {
-    s: number;
-    m: number;
-    l: number;
+    small: number;
+    medium: number;
+    large: number;
     total: number;
   };
   available: {
-    s: number;
-    m: number;
-    l: number;
+    small: number;
+    medium: number;
+    large: number;
   };
 }
 
