@@ -19,7 +19,8 @@ AUTO_TICKET_SYSTEM_DB_NAME
 # Build docker image
 docker build -t system/auto-ticket:0.1 .
 
-# Start application on stack
+# Start stack 
+# Require step before
 docker-composer up
 
 # Unit test

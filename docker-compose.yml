@@ -1,0 +1,11 @@
+version: '2.3'
+
+services:
+  api:
+    image: 'system/auto-ticket:0.1'
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo
