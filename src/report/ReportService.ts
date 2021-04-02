@@ -16,20 +16,22 @@ export class ReportService implements IReportService {
     private readonly parkingLotStageRepository: IParkingLotStageRepository,
   ) {}
 
-  // TODO refactor
   getLicencePlateByCarSize(size: 's' | 'm' | 'l'): Observable<Array<string>> {
     return this.parkingLotStageRepository.listParkingLotStage().pipe(
       filter((Slot: ParkingLotStageModel) => _.eq(Slot.getAvailable(), false)),
       toArray(),
-      map((list) => _.groupBy(list, 'carSize')[size]),
-      map((list) => {
-        if (list) {
-          return list.map((doc) => doc.getLicencePlate());
+      map(
+        (slotList: Array<ParkingLotStageModel>) =>
+          _.groupBy(slotList, 'carSize')[size],
+      ),
+      map((slotListGrouped) => {
+        if (slotListGrouped) {
+          return slotListGrouped.map((doc) => doc.getLicencePlate());
         } else {
           return [];
         }
       }),
-      map((list) => _.uniq(list)),
+      map((list: Array<string>) => _.uniq(list)),
     );
   }
 }
