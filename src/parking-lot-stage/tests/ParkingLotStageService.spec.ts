@@ -169,7 +169,7 @@ describe('ParkingLotStageService', () => {
       expect(result).toStrictEqual({ available: 0 });
     });
 
-    it('parking lot size 3x3 (any lat 2 unavailable) then get 0 car size l', async () => {
+    it('parking lot size 3x3 (any lat 1 unavailable) then get 0 car size l', async () => {
       const result = await parkingLotStageService
         .observeSlotForCarSize(mockDataSetAnyLat1Unavailable, 'l')
         .toPromise();
@@ -178,18 +178,29 @@ describe('ParkingLotStageService', () => {
   });
 
   describe('::rangingAvailableAndShortDistanceSlot', () => {
-    it('parking lot (3 doc) unsorted (available all) then get 3 slot and sort by short distance', async () => {
+    it('parking lot size 3 unsorted (available all) then get 3 slot and sort by short distance', async () => {
       jest
         .spyOn(parkingLotStageRepository, 'listParkingLotStage')
         .mockImplementation(() => from(mockUnsortedDataSetAllAvailable));
 
-      const result = await parkingLotStageService
+      const receiver = await parkingLotStageService
         .rangingAvailableAndShortDistanceSlot('s')
         .toPromise();
-
-      expect(result).toStrictEqual(
-        _.sortBy(mockUnsortedDataSetAllAvailable, 'slotAddressLat'),
-      );
+      const expected = [
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(0)
+          .setSlotAddressLong(1),
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(1)
+          .setSlotAddressLong(1),
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(2)
+          .setSlotAddressLong(1),
+      ];
+      expect(receiver).toStrictEqual(expected);
     });
 
     it('parking lot (3 doc) unsorted (lat 1 unavailable) then get 2 slot and sort by short distance', async () => {
@@ -197,15 +208,22 @@ describe('ParkingLotStageService', () => {
         .spyOn(parkingLotStageRepository, 'listParkingLotStage')
         .mockImplementation(() => from(mockUnsortedDataSetLat1Unavailable));
 
-      const result = await parkingLotStageService
+      const receiver = await parkingLotStageService
         .rangingAvailableAndShortDistanceSlot('s')
         .toPromise();
 
-      const expectedDoc = mockUnsortedDataSetAllAvailable.filter(
-        (doc) => doc.getSlotAddressLat() > 1,
-      );
+      const expected = [
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(0)
+          .setSlotAddressLong(1),
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(2)
+          .setSlotAddressLong(1),
+      ];
 
-      expect(result).toStrictEqual(_.sortBy(expectedDoc, 'slotAddressLat'));
+      expect(receiver).toStrictEqual(expected);
     });
 
     it('parking lot (3x3) unsorted (lat 1 long 2 unavailable) then get 4 slot and sort by short distance for car size M', async () => {

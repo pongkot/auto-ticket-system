@@ -3,16 +3,16 @@ import { ParkingLotStageModel } from '../../ParkingLotStageModel';
 export const mockUnsortedDataSetLat1Unavailable = [
   new ParkingLotStageModel()
     .setAvailable(true)
-    .setSlotAddressLat(3)
-    .setSlotAddressLong(0),
+    .setSlotAddressLat(0)
+    .setSlotAddressLong(1),
   new ParkingLotStageModel()
     .setAvailable(false)
     .setSlotAddressLat(1)
-    .setSlotAddressLong(0),
+    .setSlotAddressLong(1),
   new ParkingLotStageModel()
     .setAvailable(true)
     .setSlotAddressLat(2)
-    .setSlotAddressLong(0),
+    .setSlotAddressLong(1),
 ];
 
 export const mockUnsortedDataSetLat1Long2Unavailable = [
