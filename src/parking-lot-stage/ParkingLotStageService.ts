@@ -193,25 +193,50 @@ export class ParkingLotStageService implements IParkingLotStageService {
           _.groupBy(docs, 'slotAddressLat'),
           'slotAddressLong',
         );
+        const object2 = _.groupBy(docs, 'slotAddressLong');
+        const object3 = [];
+        Object.keys(object2).forEach((i) => {
+          object3.push([object2[i]]);
+        });
+        let av = 0;
+        for (let i = 0; i < _.size(object3); i++) {
+          for (let j = 0, k = 1; j < _.size(object3[i]); j++, k++) {
+            const object4 = _.sortBy(object3[i][j], 'slotAddressLat');
+            // console.log(_.sortBy(object3[i][j], 'slotAddressLat'));
+            const a = object4[j];
+            const b = object4[k];
 
-        let n = 0;
-        for (let a = 0; a < _.size(objects); a++) {
-          for (let b = 0, c = 1; b < _.size(objects[a]); b += 1, c += 1) {
-            if (objects[a][c]) {
-              if (
-                ParkingLotStageService.getDistance(
-                  objects[a][b].getSlotAddress(),
-                  objects[a][c].getSlotAddress(),
-                ) === 1
-              ) {
-                n += 1;
-                b += 2;
+            if (b) {
+              const d1 = ParkingLotStageService.getDistance(
+                a.getSlotAddress(),
+                b.getSlotAddress(),
+              );
+              if (d1 === 1) {
+                av += 1;
               }
             }
           }
         }
+        return av;
 
-        return n;
+        // let n = 0;
+        // for (let a = 0; a < _.size(objects); a++) {
+        //   for (let b = 0, c = 1; b < _.size(objects[a]); b += 1, c += 1) {
+        //     if (objects[a][c]) {
+        //       if (
+        //         ParkingLotStageService.getDistance(
+        //           objects[a][b].getSlotAddress(),
+        //           objects[a][c].getSlotAddress(),
+        //         ) === 1
+        //       ) {
+        //         n += 1;
+        //         b += 2;
+        //       }
+        //     }
+        //   }
+        // }
+        //
+        // return n;
       }),
       map((availableSlotTotal: number) => ({ available: availableSlotTotal })),
     );
