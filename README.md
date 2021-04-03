@@ -63,24 +63,60 @@ Parking lot (0,1), (1,2) and (2,3) unavailable. Next, A car size L come to park.
 
 ```text
 { 
-  "size": "3" // 3, 4, square3
+  "size": "3" # 3, 4, square3
 }
 ```
 
 or use postman collection: _Create parking lot_
-   
-![](getting-start-1.png)
+
+**Example create parking lot**
+
+```text
+# size square3
+{
+    "parkingLotId": [
+        "606843614bb6ea001e7acc3e",
+        "606843614bb6ea001e7acc3f",
+        "606843614bb6ea001e7acc40",
+        "606843614bb6ea001e7acc41",
+        "606843614bb6ea001e7acc42",
+        "606843614bb6ea001e7acc43",
+        "606843614bb6ea001e7acc45",
+        "606843614bb6ea001e7acc44",
+        "606843614bb6ea001e7acc46"
+    ]
+}
+```
 
 **4.** Create ticket by POST request to http://auto-ticket-system-api/ticket with JSON body like this
 
 ```text
 {
-  "size": "s" // s, m, l
+  "size": "s" # s, m, l
 }
 ```
 or use postman collection: _Create ticket_
 
+**Example create ticket response**
+```text
+# Car size M create ticket
+{
+    "ticketId": "606843664bb6ea001e7acc47",
+    "yourSlot": [
+        "A-1",
+        "A-2"
+    ]
+}
+```
+
 **5.** Leave parking lot by PUT request to http://auto-ticket-system-api/ticket/leave/your-ticket-id or use postman collection: _Leave parking lot_
+
+**Example leave parking lot response**
+```text
+{
+    "message": "Thank you for coming"
+}
+```
 
 **6.** Get parking lot status by GET request to http://auto-ticket-system-api/parking-lot-stage/status or use postman collection: _Get parking lot status_. Example response
 
@@ -102,11 +138,49 @@ or use postman collection: _Create ticket_
 }
 ```
 
-7.Search licence plate by car size by GET request to http://auto-ticket-system-api/report/licence-plate?size=s or use postman collection: _Search licence plate by car size_
+**7.** Search licence plate by car size by GET request with query size (s, m, l, all) to http://auto-ticket-system-api/report/licence-plate or use postman collection: _Search licence plate by car size_
+
+```text
+# s, m, l, all (default)
+?size=s
+```
+**Example search licence plate response**
+
+```text
+{
+    "subject": "Licence plate by car size S",
+    "licencePlateList": [
+        "L-67AA",
+        "L-26AA"
+    ]
+}
+```
+
+**8.** Get parking lot available by car size by GET quest with query size (s, m, l) to http://auto-ticket-system-api/slot/available or use postman collection: _Get parking slot available_
 
 ```text
 # s, m, l, all (default)
 ?size=s
 ```
 
-8.Get parking lot available by car size
+**Example get parking lot available by car size**
+
+```text
+# query size s
+{
+    "subject": "Available parking lot for car size S",
+    "slot": {
+        "small": 5
+    }
+}
+
+# no query size
+{
+    "subject": "Available parking lot for car size ALL",
+    "slot": {
+        "small": 5,
+        "medium": 1,
+        "large": 1
+    }
+}
+```
