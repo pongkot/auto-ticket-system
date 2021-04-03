@@ -19,7 +19,7 @@ import { mockUnsortedDataSetAllAvailable } from './mock-data/mockUnsortedDataSet
 import * as _ from 'lodash';
 import {
   mockUnsortedDataSetLat1Unavailable,
-  mockUnsortedDataSetLat1Long2Unavailable,
+  mockUnsortedDataSet3x3Lat1Long2Unavailable,
 } from './mock-data/mockUnsortedDataSetLat1Unavailable';
 import { mockDataSetAnyLat1Unavailable } from './mock-data/mockDataSetLong2Unavilable';
 
@@ -226,11 +226,11 @@ describe('ParkingLotStageService', () => {
       expect(receiver).toStrictEqual(expected);
     });
 
-    it('parking lot (3x3) unsorted (lat 1 long 2 unavailable) then get 4 slot and sort by short distance for car size M', async () => {
+    it('parking lot (3x3) unsorted (lat 1 long 2 unavailable) then get 6 slot and sort by short distance for car size M', async () => {
       jest
         .spyOn(parkingLotStageRepository, 'listParkingLotStage')
         .mockImplementation(() =>
-          from(mockUnsortedDataSetLat1Long2Unavailable),
+          from(mockUnsortedDataSet3x3Lat1Long2Unavailable),
         );
 
       const received = await parkingLotStageService
@@ -244,16 +244,12 @@ describe('ParkingLotStageService', () => {
           .setSlotAddressLong(1),
         new ParkingLotStageModel()
           .setAvailable(true)
-          .setSlotAddressLat(0)
-          .setSlotAddressLong(2),
-        new ParkingLotStageModel()
-          .setAvailable(true)
-          .setSlotAddressLat(0)
-          .setSlotAddressLong(3),
-        new ParkingLotStageModel()
-          .setAvailable(true)
           .setSlotAddressLat(1)
-          .setSlotAddressLong(3),
+          .setSlotAddressLong(1),
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(2)
+          .setSlotAddressLong(1),
       ];
 
       expect(received).toStrictEqual(expected);
@@ -263,7 +259,7 @@ describe('ParkingLotStageService', () => {
       jest
         .spyOn(parkingLotStageRepository, 'listParkingLotStage')
         .mockImplementation(() =>
-          from(mockUnsortedDataSetLat1Long2Unavailable),
+          from(mockUnsortedDataSet3x3Lat1Long2Unavailable),
         );
 
       const received = await parkingLotStageService
