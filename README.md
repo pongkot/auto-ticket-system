@@ -55,5 +55,5 @@ Parking lot (0,1), (1,2) and (2,3) unavailable. Next, A car size L come to park.
 ![](example-2.png)
 
 # Getting Started
-
-lorem
+1. Start Automated Ticketing System with ``docker-compose up --build``
+2. Import Postman collection with [postman_auto-ticket-system.json](postman_auto-ticket-system.json)
