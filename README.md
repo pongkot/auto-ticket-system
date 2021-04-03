@@ -61,7 +61,7 @@ Parking lot (0,1), (1,2) and (2,3) unavailable. Next, A car size L come to park.
 
 **3.** Create parking lot area by POST request to http://auto-ticket-system-api/parking-lot-stage with body JSON like this
 
-```json
+```text
 { 
   "size": "3" // 3, 4, square3
 }
@@ -73,7 +73,7 @@ or use postman collection: _Create parking lot_
 
 **4.** Create ticket by POST request to http://auto-ticket-system-api/ticket with JSON body like this
 
-```json
+```text
 {
   "size": "s" // s, m, l
 }
@@ -84,7 +84,7 @@ or use postman collection: _Create ticket_
 
 **6.** Get parking lot status by GET request to http://auto-ticket-system-api/parking-lot-stage/status or use postman collection: _Get parking lot status_. Example response
 
-```json
+```text
 {
     "subject": "Parking lot status",
     "capacity": 9, // parking lot size
