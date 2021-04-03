@@ -30,7 +30,7 @@ yarn test
 yarn test:cov
 ```
 # Assumption
-## Annotation
+### Annotation
 ![img](annotation.png)
 
 # Getting Started
