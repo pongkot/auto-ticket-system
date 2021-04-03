@@ -31,7 +31,7 @@ yarn test:cov
 ```
 # Assumption
 ### Annotation
-![img](annotation.png)
+![](annotation.png)
 
 # Getting Started
 
