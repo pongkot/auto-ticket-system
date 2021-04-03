@@ -150,6 +150,13 @@ describe('ParkingLotStageService', () => {
         .toPromise();
       expect(result).toStrictEqual({ available: 3 });
     });
+
+    it('parking lot size 3x3 (available all) then get 3 car size L', async () => {
+      const result = await parkingLotStageService
+        .observeSlotForCarSize(mockDataSet3x3AllAvailable, 'l')
+        .toPromise();
+      expect(result).toStrictEqual({ available: 3 });
+    });
   });
 
   describe('::rangingAvailableAndShortDistanceSlot', () => {

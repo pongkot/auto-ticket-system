@@ -196,7 +196,6 @@ export class ParkingLotStageService implements IParkingLotStageService {
     );
   }
 
-  // TODO refactor
   private observeSlotForCarLSize(
     slotList: Array<ParkingLotStageModel>,
   ): Observable<{ available: number }> {
@@ -204,32 +203,37 @@ export class ParkingLotStageService implements IParkingLotStageService {
       filter((slot: ParkingLotStageModel) => _.eq(slot.getAvailable(), true)),
       toArray(),
       map((docs: Array<ParkingLotStageModel>) => {
-        const a = _.sortBy(docs, 'slotAddressLat');
-        let m = 0;
-        for (let i = 0, j = 1, k = 2; i < _.size(a); i++, j++, k++) {
-          if (a[k]) {
-            if (
-              _.eq(
+        const objects = _.sortBy(
+          _.groupBy(docs, 'slotAddressLat'),
+          'slotAddressLong',
+        );
+
+        let n = 0;
+        for (let a = 0; a < _.size(objects); a++) {
+          for (
+            let b = 0, c = 1, d = 1;
+            b < _.size(objects[a]);
+            b += 1, c += 1, d += 1
+          ) {
+            if (objects[a][d]) {
+              if (
                 ParkingLotStageService.getDistance(
-                  a[i].getSlotAddress(),
-                  a[j].getSlotAddress(),
-                ),
-                1,
-              ) &&
-              _.eq(
+                  objects[a][b].getSlotAddress(),
+                  objects[a][c].getSlotAddress(),
+                ) === 1 &&
                 ParkingLotStageService.getDistance(
-                  a[j].getSlotAddress(),
-                  a[k].getSlotAddress(),
-                ),
-                1,
-              )
-            ) {
-              m += 1;
-              i += 3;
+                  objects[a][b].getSlotAddress(),
+                  objects[a][d].getSlotAddress(),
+                ) === 1
+              ) {
+                n += 1;
+                b += 3;
+              }
             }
           }
         }
-        return m;
+
+        return n;
       }),
       map((availableSlotTotal: number) => ({ available: availableSlotTotal })),
     );
