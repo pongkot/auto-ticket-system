@@ -273,24 +273,12 @@ describe('ParkingLotStageService', () => {
           .setSlotAddressLong(1),
         new ParkingLotStageModel()
           .setAvailable(true)
-          .setSlotAddressLat(2)
-          .setSlotAddressLong(1),
-        new ParkingLotStageModel()
-          .setAvailable(true)
-          .setSlotAddressLat(2)
-          .setSlotAddressLong(1),
-        new ParkingLotStageModel()
-          .setAvailable(true)
-          .setSlotAddressLat(0)
-          .setSlotAddressLong(3),
-        new ParkingLotStageModel()
-          .setAvailable(true)
           .setSlotAddressLat(1)
-          .setSlotAddressLong(3),
+          .setSlotAddressLong(1),
         new ParkingLotStageModel()
           .setAvailable(true)
           .setSlotAddressLat(2)
-          .setSlotAddressLong(3),
+          .setSlotAddressLong(1),
       ];
 
       expect(received).toStrictEqual(expected);
