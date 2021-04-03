@@ -228,33 +228,63 @@ export class ParkingLotStageService implements IParkingLotStageService {
           _.groupBy(docs, 'slotAddressLat'),
           'slotAddressLong',
         );
+        const object2 = _.groupBy(docs, 'slotAddressLong');
+        const object3 = [];
+        Object.keys(object2).forEach((i) => {
+          object3.push([object2[i]]);
+        });
+        let av = 0;
+        for (let i = 0; i < _.size(object3); i++) {
+          for (let j = 0, k = 1, l = 2; j < _.size(object3[i]); j++, k++, l++) {
+            const object4 = _.sortBy(object3[i][j], 'slotAddressLat');
+            // console.log(_.sortBy(object3[i][j], 'slotAddressLat'));
+            const a = object4[j];
+            const b = object4[k];
+            const c = object4[l];
 
-        let n = 0;
-        for (let a = 0; a < _.size(objects); a++) {
-          for (
-            let b = 0, c = 1, d = 1;
-            b < _.size(objects[a]);
-            b += 1, c += 1, d += 1
-          ) {
-            if (objects[a][d]) {
-              if (
-                ParkingLotStageService.getDistance(
-                  objects[a][b].getSlotAddress(),
-                  objects[a][c].getSlotAddress(),
-                ) === 1 &&
-                ParkingLotStageService.getDistance(
-                  objects[a][b].getSlotAddress(),
-                  objects[a][d].getSlotAddress(),
-                ) === 1
-              ) {
-                n += 1;
-                b += 3;
+            if (c) {
+              const d1 = ParkingLotStageService.getDistance(
+                a.getSlotAddress(),
+                b.getSlotAddress(),
+              );
+              const d2 = ParkingLotStageService.getDistance(
+                a.getSlotAddress(),
+                c.getSlotAddress(),
+              );
+              if (Math.abs(d1 - d2) === 1) {
+                av += 1;
               }
             }
           }
         }
+        return av;
 
-        return n;
+        // let n = 0;
+        // for (let a = 0; a < _.size(objects); a++) {
+        //   for (
+        //     let b = 0, c = 1, d = 1;
+        //     b < _.size(objects[a]);
+        //     b += 1, c += 1, d += 1
+        //   ) {
+        //     if (objects[a][d]) {
+        //       if (
+        //         ParkingLotStageService.getDistance(
+        //           objects[a][b].getSlotAddress(),
+        //           objects[a][c].getSlotAddress(),
+        //         ) === 1 &&
+        //         ParkingLotStageService.getDistance(
+        //           objects[a][b].getSlotAddress(),
+        //           objects[a][d].getSlotAddress(),
+        //         ) === 1
+        //       ) {
+        //         n += 1;
+        //         b += 3;
+        //       }
+        //     }
+        //   }
+        // }
+        //
+        // return n;
       }),
       map((availableSlotTotal: number) => ({ available: availableSlotTotal })),
     );

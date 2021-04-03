@@ -205,7 +205,7 @@ export const parking3x3: Array<IParkingLotSize> = [
   {
     slotId: 'C-3',
     slotAddress: {
-      lat: 3,
+      lat: 2,
       long: 3,
     },
     available: true,
