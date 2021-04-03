@@ -18,6 +18,7 @@ import { mockDateSetLat2Unavailable } from './mock-data/mockDateSetLat2Unavailab
 import { mockUnsortedDataSetAllAvailable } from './mock-data/mockUnsortedDataSetAllAvailable';
 import * as _ from 'lodash';
 import { mockUnsortedDataSetLat1Unavailable } from './mock-data/mockUnsortedDataSetLat1Unavailable';
+import { mockDataSetAnyLat2Unavailable } from './mock-data/mockDataSetLong2Unavilable';
 
 describe('ParkingLotStageService', () => {
   let parkingLotStageService: IParkingLotStageService;
@@ -156,6 +157,20 @@ describe('ParkingLotStageService', () => {
         .observeSlotForCarSize(mockDataSet3x3AllAvailable, 'l')
         .toPromise();
       expect(result).toStrictEqual({ available: 3 });
+    });
+
+    it('parking lot size 3x3 (any lat 2 unavailable) then get 0 car size m', async () => {
+      const result = await parkingLotStageService
+        .observeSlotForCarSize(mockDataSetAnyLat2Unavailable, 'm')
+        .toPromise();
+      expect(result).toStrictEqual({ available: 0 });
+    });
+
+    it('parking lot size 3x3 (any lat 2 unavailable) then get 0 car size l', async () => {
+      const result = await parkingLotStageService
+        .observeSlotForCarSize(mockDataSetAnyLat2Unavailable, 'l')
+        .toPromise();
+      expect(result).toStrictEqual({ available: 0 });
     });
   });
 
