@@ -111,7 +111,7 @@ export class ParkingLotStageService implements IParkingLotStageService {
   }
 
   private static getDistance(a: IAddress, b: IAddress): number {
-    return Math.sqrt(Math.pow(a.lat - b.lat, 2) - Math.pow(a.long - b.long, 2));
+    return Math.sqrt(Math.pow(a.lat - b.lat, 2) + Math.pow(a.long - b.long, 2));
   }
 
   rangingAvailableAndShortDistanceSlot(): Observable<
@@ -168,21 +168,56 @@ export class ParkingLotStageService implements IParkingLotStageService {
       filter((slot: ParkingLotStageModel) => _.eq(slot.getAvailable(), true)),
       toArray(),
       map((docs: Array<ParkingLotStageModel>) => {
-        let m = 0;
-        for (let i = 0, j = 1; i < _.size(docs); i++, j++) {
-          if (docs[j]) {
-            if (
-              ParkingLotStageService.getDistance(
-                docs[i].getSlotAddress(),
-                docs[j].getSlotAddress(),
-              ) === 1
-            ) {
-              m += 1;
-              i += 2;
+        // console.log(docs);
+        const objects = _.sortBy(
+          _.groupBy(docs, 'slotAddressLat'),
+          'slotAddressLong',
+        );
+        // console.log(objects);
+
+        let n = 0;
+        for (let a = 0; a < _.size(objects); a++) {
+          console.log('!', objects[a]);
+          for (let b = 0, c = 1; b < _.size(objects[a]); b += 1, c += 1) {
+            if (objects[a][c]) {
+              // console.log({
+              //   a: objects[a][b],
+              //   b: objects[a][c],
+              //   distance: ParkingLotStageService.getDistance(
+              //     objects[a][b].getSlotAddress(),
+              //     objects[a][c].getSlotAddress(),
+              //   ),
+              // });
+              if (
+                ParkingLotStageService.getDistance(
+                  objects[a][b].getSlotAddress(),
+                  objects[a][c].getSlotAddress(),
+                ) === 1
+              ) {
+                n += 1;
+                b += 2;
+              }
             }
           }
         }
-        return m;
+        // console.log('n =', n);
+        return n;
+
+        // let m = 0;
+        // for (let i = 0, j = 1; i < _.size(docs); i++, j++) {
+        //   if (docs[j]) {
+        //     if (
+        //       ParkingLotStageService.getDistance(
+        //         docs[i].getSlotAddress(),
+        //         docs[j].getSlotAddress(),
+        //       ) === 1
+        //     ) {
+        //       m += 1;
+        //       i += 2;
+        //     }
+        //   }
+        // }
+        // return m;
       }),
       map((availableSlotTotal: number) => ({ available: availableSlotTotal })),
     );

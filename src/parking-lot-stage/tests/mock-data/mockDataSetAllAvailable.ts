@@ -7,12 +7,12 @@ export const mockDataSetAllAvailable = [
     .setSlotAddressLong(0),
   new ParkingLotStageModel()
     .setAvailable(true)
-    .setSlotAddressLat(2)
-    .setSlotAddressLong(0),
+    .setSlotAddressLat(1)
+    .setSlotAddressLong(1),
   new ParkingLotStageModel()
     .setAvailable(true)
-    .setSlotAddressLat(3)
-    .setSlotAddressLong(0),
+    .setSlotAddressLat(1)
+    .setSlotAddressLong(2),
 ];
 
 export const mockDataSet3x3AllAvailable = [
