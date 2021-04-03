@@ -1,8 +1,6 @@
-import { IsInt, Max, Min } from 'class-validator';
+import { IsIn } from 'class-validator';
 
 export class CreateParkingLotDto {
-  @IsInt()
-  @Max(4)
-  @Min(3)
-  size: 3 | 4;
+  @IsIn(['3', '4', 'square3'])
+  size: '3' | '4' | 'square3';
 }

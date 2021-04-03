@@ -4,7 +4,9 @@ import { ParkingLotStageModel } from '../ParkingLotStageModel';
 import { ISummaryParkingLotStage } from './ISummaryParkingLotStage';
 
 export interface IParkingLotStageService {
-  createParkingLot(size: 3 | 4): Observable<{ parkingLotId: Array<ObjectId> }>;
+  createParkingLot(
+    size: '3' | '4' | 'square3',
+  ): Observable<{ parkingLotId: Array<ObjectId> }>;
 
   listAvailableParkingLot(): Observable<ParkingLotStageModel>;
 

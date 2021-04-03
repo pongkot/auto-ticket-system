@@ -1,11 +1,11 @@
 import * as _ from 'lodash';
 import { IConfig } from './interfaces';
-import { parking1x3, parking1x4 } from '../htdocs/config';
+import { parking1x3, parking1x4, parking3x3 } from '../htdocs/config';
 
 const ENV = process.env;
 
 export const config: IConfig = {
-  parkingLotSize: { 3: parking1x3, 4: parking1x4 },
+  parkingLotSize: { '3': parking1x3, '4': parking1x4, square3: parking3x3 },
   gateAddress: {
     lat: 0,
     long: 0,

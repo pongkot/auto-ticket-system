@@ -6,8 +6,9 @@ export interface IConfig {
     autoTicketSystem: IDatabaseOption;
   };
   parkingLotSize: {
-    3: Array<IParkingLotSize>;
-    4: Array<IParkingLotSize>;
+    '3': Array<IParkingLotSize>;
+    '4': Array<IParkingLotSize>;
+    square3: Array<IParkingLotSize>;
   };
   gateAddress: {
     lat: number;

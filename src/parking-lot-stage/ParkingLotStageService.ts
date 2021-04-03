@@ -59,7 +59,9 @@ export class ParkingLotStageService implements IParkingLotStageService {
     private readonly parkingLotStageMapping: ParkingLotStageMapping,
   ) {}
 
-  createParkingLot(size: 3 | 4): Observable<{ parkingLotId: Array<ObjectId> }> {
+  createParkingLot(
+    size: '3' | '4' | 'square3',
+  ): Observable<{ parkingLotId: Array<ObjectId> }> {
     const { parkingLotSize } = this.config;
     const parkingLotList = parkingLotSize[size];
     return from(parkingLotList).pipe(
