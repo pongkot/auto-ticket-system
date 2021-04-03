@@ -16,12 +16,11 @@ AUTO_TICKET_SYSTEM_DB_NAME
 # Scripts
 
 ```shell
-# Build docker image
-docker build -t system/auto-ticket:0.1 .
+# Start stack
+docker-compose up
 
-# Start stack 
-# Require step before
-docker-composer up
+# Start development
+yarn start:dev
 
 # Unit test
 yarn test
