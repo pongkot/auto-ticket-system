@@ -1,32 +1,24 @@
 import { ParkingLotStageModel } from '../../ParkingLotStageModel';
 
-export const mockDataSetAnyLat2Unavailable = [
+export const mockDataSetAnyLat1Unavailable = [
   new ParkingLotStageModel()
     .setAvailable(true)
-    .setSlotAddressLat(1)
-    .setSlotAddressLong(0),
-  new ParkingLotStageModel()
-    .setAvailable(true)
-    .setSlotAddressLat(2)
-    .setSlotAddressLong(0),
-  new ParkingLotStageModel()
-    .setAvailable(true)
-    .setSlotAddressLat(3)
-    .setSlotAddressLong(0),
+    .setSlotAddressLat(0)
+    .setSlotAddressLong(1),
   new ParkingLotStageModel()
     .setAvailable(false)
     .setSlotAddressLat(1)
     .setSlotAddressLong(1),
   new ParkingLotStageModel()
-    .setAvailable(false)
+    .setAvailable(true)
     .setSlotAddressLat(2)
     .setSlotAddressLong(1),
   new ParkingLotStageModel()
-    .setAvailable(false)
-    .setSlotAddressLat(3)
-    .setSlotAddressLong(1),
-  new ParkingLotStageModel()
     .setAvailable(true)
+    .setSlotAddressLat(0)
+    .setSlotAddressLong(2),
+  new ParkingLotStageModel()
+    .setAvailable(false)
     .setSlotAddressLat(1)
     .setSlotAddressLong(2),
   new ParkingLotStageModel()
@@ -35,6 +27,14 @@ export const mockDataSetAnyLat2Unavailable = [
     .setSlotAddressLong(2),
   new ParkingLotStageModel()
     .setAvailable(true)
-    .setSlotAddressLat(3)
-    .setSlotAddressLong(2),
+    .setSlotAddressLat(0)
+    .setSlotAddressLong(3),
+  new ParkingLotStageModel()
+    .setAvailable(false)
+    .setSlotAddressLat(1)
+    .setSlotAddressLong(3),
+  new ParkingLotStageModel()
+    .setAvailable(true)
+    .setSlotAddressLat(2)
+    .setSlotAddressLong(3),
 ];

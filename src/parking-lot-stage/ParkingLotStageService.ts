@@ -141,8 +141,6 @@ export class ParkingLotStageService implements IParkingLotStageService {
           m: 2,
           l: 3,
         };
-        console.log(a);
-        console.log(j[carSize]);
         const b = a.filter((o) => _.size(o) >= j[carSize]);
         return _.flatMapDeep(b);
       }),

@@ -19,9 +19,9 @@ import { mockUnsortedDataSetAllAvailable } from './mock-data/mockUnsortedDataSet
 import * as _ from 'lodash';
 import {
   mockUnsortedDataSetLat1Unavailable,
-  mockUnsortedDataSetLat2Long1Unavailable,
+  mockUnsortedDataSetLat1Long2Unavailable,
 } from './mock-data/mockUnsortedDataSetLat1Unavailable';
-import { mockDataSetAnyLat2Unavailable } from './mock-data/mockDataSetLong2Unavilable';
+import { mockDataSetAnyLat1Unavailable } from './mock-data/mockDataSetLong2Unavilable';
 
 describe('ParkingLotStageService', () => {
   let parkingLotStageService: IParkingLotStageService;
@@ -99,42 +99,42 @@ describe('ParkingLotStageService', () => {
   });
 
   describe('::observeSlotForCarSize', () => {
-    it('parking lot size is 3 (available all) then get 3 car size S', async () => {
+    it('parking lot size 3 (available all) then get 3 car size S', async () => {
       const result = await parkingLotStageService
         .observeSlotForCarSize(mockDataSetAllAvailable, 's')
         .toPromise();
       expect(result).toStrictEqual({ available: 3 });
     });
 
-    it('parking lot size is 3 (available all) then get 1 car size M', async () => {
+    it('parking lot size 3 (available all) then get 1 car size M', async () => {
       const result = await parkingLotStageService
         .observeSlotForCarSize(mockDataSetAllAvailable, 'm')
         .toPromise();
       expect(result).toStrictEqual({ available: 1 });
     });
 
-    it('parking lot size is 3 (available all) then get 1 car size L', async () => {
+    it('parking lot size 3 (available all) then get 1 car size L', async () => {
       const result = await parkingLotStageService
         .observeSlotForCarSize(mockDataSetAllAvailable, 'l')
         .toPromise();
       expect(result).toStrictEqual({ available: 1 });
     });
 
-    it('parking lot size is 3 (lat 2 unavailable) then get 2 car size S', async () => {
+    it('parking lot size 3 (lat 2 unavailable) then get 2 car size S', async () => {
       const result = await parkingLotStageService
         .observeSlotForCarSize(mockDateSetLat2Unavailable, 's')
         .toPromise();
       expect(result).toStrictEqual({ available: 2 });
     });
 
-    it('parking lot size is 3 (lat 2 unavailable) then get 0 car size M', async () => {
+    it('parking lot size 3 (lat 2 unavailable) then get 0 car size M', async () => {
       const result = await parkingLotStageService
         .observeSlotForCarSize(mockDateSetLat2Unavailable, 'm')
         .toPromise();
       expect(result).toStrictEqual({ available: 0 });
     });
 
-    it('parking lot size is 3 (lat 2 unavailable) then get 0 car size L', async () => {
+    it('parking lot size 3 (lat 2 unavailable) then get 0 car size L', async () => {
       const result = await parkingLotStageService
         .observeSlotForCarSize(mockDateSetLat2Unavailable, 'l')
         .toPromise();
@@ -162,16 +162,16 @@ describe('ParkingLotStageService', () => {
       expect(result).toStrictEqual({ available: 3 });
     });
 
-    it('parking lot size 3x3 (any lat 2 unavailable) then get 0 car size m', async () => {
+    it('parking lot size 3x3 (any lat 1 unavailable) then get 0 car size m', async () => {
       const result = await parkingLotStageService
-        .observeSlotForCarSize(mockDataSetAnyLat2Unavailable, 'm')
+        .observeSlotForCarSize(mockDataSetAnyLat1Unavailable, 'm')
         .toPromise();
       expect(result).toStrictEqual({ available: 0 });
     });
 
     it('parking lot size 3x3 (any lat 2 unavailable) then get 0 car size l', async () => {
       const result = await parkingLotStageService
-        .observeSlotForCarSize(mockDataSetAnyLat2Unavailable, 'l')
+        .observeSlotForCarSize(mockDataSetAnyLat1Unavailable, 'l')
         .toPromise();
       expect(result).toStrictEqual({ available: 0 });
     });
@@ -208,11 +208,11 @@ describe('ParkingLotStageService', () => {
       expect(result).toStrictEqual(_.sortBy(expectedDoc, 'slotAddressLat'));
     });
 
-    it('parking lot (3x3) unsorted (lat 2 long 1 unavailable) then get 2 slot and sort by short distance', async () => {
+    it('parking lot (3x3) unsorted (lat 1 long 2 unavailable) then get 4 slot and sort by short distance for car size M', async () => {
       jest
         .spyOn(parkingLotStageRepository, 'listParkingLotStage')
         .mockImplementation(() =>
-          from(mockUnsortedDataSetLat2Long1Unavailable),
+          from(mockUnsortedDataSetLat1Long2Unavailable),
         );
 
       const received = await parkingLotStageService
@@ -222,16 +222,53 @@ describe('ParkingLotStageService', () => {
       const expected = [
         new ParkingLotStageModel()
           .setAvailable(true)
-          .setSlotAddressLat(1)
+          .setSlotAddressLat(0)
+          .setSlotAddressLong(1),
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(0)
           .setSlotAddressLong(2),
         new ParkingLotStageModel()
           .setAvailable(true)
+          .setSlotAddressLat(0)
+          .setSlotAddressLong(3),
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(1)
+          .setSlotAddressLong(3),
+      ];
+
+      expect(received).toStrictEqual(expected);
+    });
+
+    it('parking lot (3x3) unsorted (lat 1 long 2 unavailable then get 6 slot and sort by short distance for car size L', async () => {
+      jest
+        .spyOn(parkingLotStageRepository, 'listParkingLotStage')
+        .mockImplementation(() =>
+          from(mockUnsortedDataSetLat1Long2Unavailable),
+        );
+
+      const received = await parkingLotStageService
+        .rangingAvailableAndShortDistanceSlot('l')
+        .toPromise();
+
+      const expected = [
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(0)
+          .setSlotAddressLong(1),
+        new ParkingLotStageModel()
+          .setAvailable(true)
           .setSlotAddressLat(2)
           .setSlotAddressLong(1),
         new ParkingLotStageModel()
           .setAvailable(true)
-          .setSlotAddressLat(3)
+          .setSlotAddressLat(2)
           .setSlotAddressLong(1),
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(0)
+          .setSlotAddressLong(3),
         new ParkingLotStageModel()
           .setAvailable(true)
           .setSlotAddressLat(1)
@@ -239,10 +276,6 @@ describe('ParkingLotStageService', () => {
         new ParkingLotStageModel()
           .setAvailable(true)
           .setSlotAddressLat(2)
-          .setSlotAddressLong(3),
-        new ParkingLotStageModel()
-          .setAvailable(true)
-          .setSlotAddressLat(3)
           .setSlotAddressLong(3),
       ];
 

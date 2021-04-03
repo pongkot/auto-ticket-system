@@ -15,7 +15,7 @@ export const mockUnsortedDataSetLat1Unavailable = [
     .setSlotAddressLong(0),
 ];
 
-export const mockUnsortedDataSetLat2Long1Unavailable = [
+export const mockUnsortedDataSetLat1Long2Unavailable = [
   new ParkingLotStageModel()
     .setAvailable(true)
     .setSlotAddressLat(2)
@@ -33,11 +33,11 @@ export const mockUnsortedDataSetLat2Long1Unavailable = [
     .setSlotAddressLat(1)
     .setSlotAddressLong(0),
   new ParkingLotStageModel()
-    .setAvailable(false)
+    .setAvailable(true)
     .setSlotAddressLat(2)
     .setSlotAddressLong(1),
   new ParkingLotStageModel()
-    .setAvailable(true)
+    .setAvailable(false)
     .setSlotAddressLat(1)
     .setSlotAddressLong(2),
   new ParkingLotStageModel()
