@@ -53,7 +53,9 @@ export class TicketService implements ITicketService {
               HttpStatus.NOT_FOUND,
             );
           }
-          return this.parkingLotStageService.rangingAvailableAndShortDistanceSlot();
+          return this.parkingLotStageService.rangingAvailableAndShortDistanceSlot(
+            carSize,
+          );
         }),
         mergeMap((availableSlotList: Array<ParkingLotStageModel>) => {
           const carDoc = {

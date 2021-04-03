@@ -14,3 +14,42 @@ export const mockUnsortedDataSetLat1Unavailable = [
     .setSlotAddressLat(2)
     .setSlotAddressLong(0),
 ];
+
+export const mockUnsortedDataSetLat2Long1Unavailable = [
+  new ParkingLotStageModel()
+    .setAvailable(true)
+    .setSlotAddressLat(2)
+    .setSlotAddressLong(0),
+  new ParkingLotStageModel()
+    .setAvailable(true)
+    .setSlotAddressLat(3)
+    .setSlotAddressLong(0),
+  new ParkingLotStageModel()
+    .setAvailable(true)
+    .setSlotAddressLat(1)
+    .setSlotAddressLong(1),
+  new ParkingLotStageModel()
+    .setAvailable(true)
+    .setSlotAddressLat(1)
+    .setSlotAddressLong(0),
+  new ParkingLotStageModel()
+    .setAvailable(false)
+    .setSlotAddressLat(2)
+    .setSlotAddressLong(1),
+  new ParkingLotStageModel()
+    .setAvailable(true)
+    .setSlotAddressLat(1)
+    .setSlotAddressLong(2),
+  new ParkingLotStageModel()
+    .setAvailable(true)
+    .setSlotAddressLat(2)
+    .setSlotAddressLong(2),
+  new ParkingLotStageModel()
+    .setAvailable(true)
+    .setSlotAddressLat(3)
+    .setSlotAddressLong(1),
+  new ParkingLotStageModel()
+    .setAvailable(true)
+    .setSlotAddressLat(3)
+    .setSlotAddressLong(2),
+];

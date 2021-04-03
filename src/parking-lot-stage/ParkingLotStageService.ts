@@ -116,9 +116,9 @@ export class ParkingLotStageService implements IParkingLotStageService {
     return Math.sqrt(Math.pow(a.lat - b.lat, 2) + Math.pow(a.long - b.long, 2));
   }
 
-  rangingAvailableAndShortDistanceSlot(): Observable<
-    Array<ParkingLotStageModel>
-  > {
+  rangingAvailableAndShortDistanceSlot(
+    carSize: 's' | 'm' | 'l',
+  ): Observable<Array<ParkingLotStageModel>> {
     return this.listAvailableParkingLot().pipe(
       map((Doc: ParkingLotStageModel) => {
         return {
@@ -130,7 +130,26 @@ export class ParkingLotStageService implements IParkingLotStageService {
       map((Docs: Array<IA>) => {
         return _.sortBy(Docs, 'distance');
       }),
-      map((Docs: Array<IA>) => Docs.map((list: IA) => list.Doc).slice(0, 4)),
+      map((e) => {
+        const r = _.groupBy(e, 'Doc.slotAddressLong');
+        // console.log(r);
+        const a = [];
+        Object.keys(r).forEach((i) => {
+          a.push(r[i]);
+        });
+        const j = {
+          s: 1,
+          m: 2,
+          l: 3,
+        };
+        console.log(a);
+        console.log(j[carSize]);
+        const b = a.filter((o) => _.size(o) >= j[carSize]); // TODO send size
+        // console.log(b);
+        // console.log(c);
+        return _.flatMapDeep(b);
+      }),
+      map((Docs: Array<IA>) => Docs.map((list: IA) => list.Doc).slice(0, 3)),
     );
   }
 

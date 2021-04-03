@@ -22,9 +22,9 @@ export interface IParkingLotStageService {
 
   searchParkingSlotByTicketId(id: string): Observable<ParkingLotStageModel>;
 
-  rangingAvailableAndShortDistanceSlot(): Observable<
-    Array<ParkingLotStageModel>
-  >;
+  rangingAvailableAndShortDistanceSlot(
+    carSize: 's' | 'm' | 'l',
+  ): Observable<Array<ParkingLotStageModel>>;
 
   getSummaryParkingLotStage(): Observable<ISummaryParkingLotStage>;
 }

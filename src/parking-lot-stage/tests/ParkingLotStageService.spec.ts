@@ -17,7 +17,10 @@ import {
 import { mockDateSetLat2Unavailable } from './mock-data/mockDateSetLat2Unavailable';
 import { mockUnsortedDataSetAllAvailable } from './mock-data/mockUnsortedDataSetAllAvailable';
 import * as _ from 'lodash';
-import { mockUnsortedDataSetLat1Unavailable } from './mock-data/mockUnsortedDataSetLat1Unavailable';
+import {
+  mockUnsortedDataSetLat1Unavailable,
+  mockUnsortedDataSetLat2Long1Unavailable,
+} from './mock-data/mockUnsortedDataSetLat1Unavailable';
 import { mockDataSetAnyLat2Unavailable } from './mock-data/mockDataSetLong2Unavilable';
 
 describe('ParkingLotStageService', () => {
@@ -181,7 +184,7 @@ describe('ParkingLotStageService', () => {
         .mockImplementation(() => from(mockUnsortedDataSetAllAvailable));
 
       const result = await parkingLotStageService
-        .rangingAvailableAndShortDistanceSlot()
+        .rangingAvailableAndShortDistanceSlot('s')
         .toPromise();
 
       expect(result).toStrictEqual(
@@ -195,7 +198,7 @@ describe('ParkingLotStageService', () => {
         .mockImplementation(() => from(mockUnsortedDataSetLat1Unavailable));
 
       const result = await parkingLotStageService
-        .rangingAvailableAndShortDistanceSlot()
+        .rangingAvailableAndShortDistanceSlot('s')
         .toPromise();
 
       const expectedDoc = mockUnsortedDataSetAllAvailable.filter(
@@ -203,6 +206,47 @@ describe('ParkingLotStageService', () => {
       );
 
       expect(result).toStrictEqual(_.sortBy(expectedDoc, 'slotAddressLat'));
+    });
+
+    it('parking lot (3x3) unsorted (lat 2 long 1 unavailable) then get 2 slot and sort by short distance', async () => {
+      jest
+        .spyOn(parkingLotStageRepository, 'listParkingLotStage')
+        .mockImplementation(() =>
+          from(mockUnsortedDataSetLat2Long1Unavailable),
+        );
+
+      const received = await parkingLotStageService
+        .rangingAvailableAndShortDistanceSlot('m')
+        .toPromise();
+
+      const expected = [
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(1)
+          .setSlotAddressLong(2),
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(2)
+          .setSlotAddressLong(1),
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(3)
+          .setSlotAddressLong(1),
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(1)
+          .setSlotAddressLong(3),
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(2)
+          .setSlotAddressLong(3),
+        new ParkingLotStageModel()
+          .setAvailable(true)
+          .setSlotAddressLat(3)
+          .setSlotAddressLong(3),
+      ];
+
+      expect(received).toStrictEqual(expected);
     });
   });
 });
