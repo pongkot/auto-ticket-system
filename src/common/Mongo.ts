@@ -218,7 +218,7 @@ export class Mongo<ISchema extends { _id: any }> {
     const option: IDatabaseOption = this.getOptional();
 
     if (!option.user || !option.password) {
-      result = `localhost:${option.port}`;
+      result = `${option.host}:${option.port}`;
     } else {
       result = `${option.user}:${option.password}@${option.host}:${option.port}`;
     }
