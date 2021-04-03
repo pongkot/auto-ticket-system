@@ -223,6 +223,8 @@ export class Mongo<ISchema extends { _id: any }> {
       result = `${option.user}:${option.password}@${option.host}:${option.port}`;
     }
 
+    console.log(result);
+
     return `mongodb://${result}`;
   }
 }
